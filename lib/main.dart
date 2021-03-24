@@ -12,9 +12,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.cyan[700],
       ),
       home: MyHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -71,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.grey[100],
       // body: AnimatedContainer(
       //   duration: Duration(milliseconds: 800),
       //   color: colors[selectedIndex],

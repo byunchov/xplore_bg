@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:xplore_bg/models/state.dart';
+import 'package:xplore_bg/pages/state_places.dart';
 
 class StateTile extends StatelessWidget {
   final StateModel stateModel;
@@ -19,7 +22,7 @@ class StateTile extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey[400]),
+                // border: Border.all(color: Colors.grey[400]),
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
@@ -46,7 +49,7 @@ class StateTile extends StatelessWidget {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      Colors.black87,
+                      Colors.black45,
                       Colors.transparent,
                     ],
                   ),
@@ -67,7 +70,18 @@ class StateTile extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StatePlaces(
+              stateModel: stateModel,
+              appBarColor:
+                  Colors.primaries[Random().nextInt(Colors.primaries.length)],
+            ),
+          ),
+        );
+      },
     );
   }
 }

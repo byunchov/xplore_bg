@@ -15,7 +15,7 @@ class PlaceItemSmall extends StatelessWidget {
       child: Container(
         // margin: EdgeInsets.only(left: 0, right: 10, top: 5, bottom: 5),
         // margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        margin: EdgeInsets.only(left: 12, top: 5, bottom: 5),
+        margin: EdgeInsets.only(left: 12, top: 7, bottom: 7),
         width: MediaQuery.of(context).size.width * 0.36,
         decoration: BoxDecoration(
             color: Colors.grey[300], borderRadius: BorderRadius.circular(10)),
@@ -23,12 +23,25 @@ class PlaceItemSmall extends StatelessWidget {
           children: [
             Hero(
               tag: '$tag{place.timestamp}',
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  place.gallery[0],
-                  fit: BoxFit.cover,
-                  height: MediaQuery.of(context).size.height,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  // border: Border.all(color: Colors.grey[400]),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black12,
+                        spreadRadius: 1.0,
+                        blurRadius: 3.0),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    place.gallery[0],
+                    fit: BoxFit.cover,
+                    height: MediaQuery.of(context).size.height,
+                  ),
                 ),
               ),
             ),
@@ -39,7 +52,7 @@ class PlaceItemSmall extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black87],
+                    colors: [Colors.transparent, Colors.black54],
                   ),
                 ),
               ),
