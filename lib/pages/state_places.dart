@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:xplore_bg/models/place.dart';
 import 'package:xplore_bg/models/state.dart';
+import 'package:xplore_bg/widgets/place_item_states.dart';
 
 class StatePlaces extends StatefulWidget {
   final StateModel stateModel;
@@ -17,6 +21,8 @@ class _StatePlacesState extends State<StatePlaces> {
 
   @override
   Widget build(BuildContext context) {
+    // double _sliverradius = 30;
+
     return Scaffold(
       body: CustomScrollView(
         controller: _controller,
@@ -35,9 +41,8 @@ class _StatePlacesState extends State<StatePlaces> {
                 },
               )
             ],
-            backgroundColor: (widget.appBarColor != null)
-                ? widget.appBarColor
-                : Theme.of(context).primaryColor,
+            backgroundColor:
+                widget.appBarColor ?? Theme.of(context).primaryColor,
             expandedHeight: 180,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: false,
@@ -46,6 +51,12 @@ class _StatePlacesState extends State<StatePlaces> {
                   Container(
                     height: MediaQuery.of(context).size.height,
                     width: double.infinity,
+                    // decoration: BoxDecoration(
+                    //   borderRadius: BorderRadius.only(
+                    //     bottomLeft: Radius.circular(_sliverradius),
+                    //     bottomRight: Radius.circular(_sliverradius),
+                    //   ),
+                    // ),
                     child: Image.network(
                       widget.stateModel.thumbnail,
                       fit: BoxFit.cover,
@@ -56,8 +67,15 @@ class _StatePlacesState extends State<StatePlaces> {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black45],
+                        colors: [
+                          Colors.transparent,
+                          Colors.black38.withOpacity(0.6)
+                        ],
                       ),
+                      // borderRadius: BorderRadius.only(
+                      //   bottomLeft: Radius.circular(_sliverradius),
+                      //   bottomRight: Radius.circular(_sliverradius),
+                      // ),
                     ),
                   ),
                 ],
@@ -72,14 +90,27 @@ class _StatePlacesState extends State<StatePlaces> {
               titlePadding: EdgeInsets.only(left: 20, bottom: 15),
             ),
           ),
-          SliverList(
-            // Use a delegate to build items as they're scrolled on screen.
-            delegate: SliverChildBuilderDelegate(
-              // The builder function returns a ListTile with a title that
-              // displays the index of the current item.
-              (context, index) => ListTile(title: Text('Item #$index')),
-              // Builds 1000 ListTiles
-              childCount: 1000,
+          SliverPadding(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            sliver: SliverList(
+              // Use a delegate to build items as they're scrolled on screen.
+              delegate: SliverChildBuilderDelegate(
+                // The builder function returns a ListTile with a title that
+                // displays the index of the current item.
+                (context, index) => PlaceItemState(
+                  tag: "sate$index",
+                  place: Place(
+                    name: "Place $index",
+                    location: "town $index, Plaxe $index",
+                    loves: Random().nextInt(100) + 10,
+                    commentCount: Random().nextInt(100) + 10,
+                    gallery: <String>[
+                      "http://infomreja.bg/upload/articles/images/18387/024ec2c710680539c9257aa4a27fd7d5.jpg",
+                    ],
+                  ),
+                ),
+                childCount: 10,
+              ),
             ),
           ),
         ],

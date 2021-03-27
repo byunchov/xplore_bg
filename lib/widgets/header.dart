@@ -1,35 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:xplore_bg/pages/sign_in.dart';
 
 class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.grey[200],
+      // color: Colors.cyan[700].withOpacity(0.3),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "App Aame",
+                      "app_title",
                       style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w900,
                           color: Colors.grey[800]),
-                    ),
+                    ).tr(),
                     Text(
-                      "desc",
+                      "app_description",
                       style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: Colors.grey[600]),
-                    ),
+                    ).tr(),
                   ],
                 ),
                 Spacer(),
@@ -43,12 +48,16 @@ class Header extends StatelessWidget {
                     ),
                     child: Center(
                       child: Icon(
-                        LineIcons.user,
+                        Feather.user,
                         color: Colors.white,
                         size: 27,
                       ),
                     ),
                   ),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (ctx) => LoginScreen()));
+                  },
                 ),
               ],
             ),
@@ -78,7 +87,7 @@ class Header extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        "Search ...",
+                        "search_places".tr(),
                         style: TextStyle(color: Colors.grey[700], fontSize: 15),
                       ),
                     ],

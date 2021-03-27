@@ -22,7 +22,7 @@ class PlaceItemSmall extends StatelessWidget {
         child: Stack(
           children: [
             Hero(
-              tag: '$tag{place.timestamp}',
+              tag: '$tag${place.name}',
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
@@ -52,7 +52,7 @@ class PlaceItemSmall extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black54],
+                    colors: [Colors.transparent, Colors.black38],
                   ),
                 ),
               ),

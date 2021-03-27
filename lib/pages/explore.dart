@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:xplore_bg/models/place.dart';
 import 'package:xplore_bg/widgets/header.dart';
 import 'package:xplore_bg/widgets/place_item_small.dart';
@@ -35,9 +35,12 @@ class ExplorePage extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(LineIcons.arrow_right),
+                          icon: Icon(
+                            Feather.arrow_right,
+                            color: Colors.grey[800],
+                          ),
                           onPressed: () {},
-                        )
+                        ),
                       ],
                     ),
                   )
@@ -54,7 +57,7 @@ class ExplorePage extends StatelessWidget {
                       shrinkWrap: true,
                       children: [
                         PlaceItemSmall(
-                          tag: "recent",
+                          tag: "popular",
                           place: Place(
                             name: "Банско",
                             loves: 100,
@@ -64,7 +67,7 @@ class ExplorePage extends StatelessWidget {
                           ),
                         ),
                         PlaceItemSmall(
-                          tag: "recent",
+                          tag: "popular",
                           place: Place(
                             name: "Разлог",
                             loves: 89,
@@ -74,7 +77,7 @@ class ExplorePage extends StatelessWidget {
                           ),
                         ),
                         PlaceItemSmall(
-                          tag: "recent",
+                          tag: "popular",
                           place: Place(
                             name: "Добринище",
                             loves: 54,
@@ -84,7 +87,7 @@ class ExplorePage extends StatelessWidget {
                           ),
                         ),
                         PlaceItemSmall(
-                          tag: "recent",
+                          tag: "popular",
                           place: Place(
                             name: "Баня",
                             loves: 61,
@@ -116,9 +119,12 @@ class ExplorePage extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(LineIcons.arrow_right),
+                          icon: Icon(
+                            Feather.arrow_right,
+                            color: Colors.grey[800],
+                          ),
                           onPressed: () {},
-                        )
+                        ),
                       ],
                     ),
                   )
