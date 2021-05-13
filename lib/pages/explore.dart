@@ -1,183 +1,141 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:xplore_bg/models/place.dart';
+import 'package:xplore_bg/utils/place_list.dart';
+import 'package:xplore_bg/widgets/header.dart';
 import 'package:xplore_bg/widgets/place_item_small.dart';
 
-class ExplorePage extends StatelessWidget {
+class ExplorePage extends StatefulWidget {
+  @override
+  _ExplorePageState createState() => _ExplorePageState();
+}
+
+class _ExplorePageState extends State<ExplorePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 20,
-        title: const Text('Xplore Bulgaria'),
-        backgroundColor: Colors.cyan[700],
-      ),
+      // appBar: AppBar(
+      //   elevation: 20,
+      //   title: const Text('Xplore Bulgaria'),
+      //   backgroundColor: Theme.of(context).primaryColor,
+      // ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Най-популярни",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.grey[800],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Header(),
+              Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "most_popular",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.grey[800],
+                          ),
+                        ).tr(),
+                        IconButton(
+                          icon: Icon(
+                            Feather.arrow_right,
+                            color: Colors.grey[800],
+                          ),
+                          onPressed: () {},
                         ),
-                      ),
-                      IconButton(
-                        icon: Icon(LineIcons.arrow_right),
-                        onPressed: () {},
-                      )
-                    ],
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    height: 250,
+                    width: MediaQuery.of(context).size.width,
+                    // color: Colors.lightBlue,
+                    child: ListView.separated(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return PlaceItemSmall(
+                          tag: "popular$index",
+                          place: categoryContent[index],
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(width: 2);
+                      },
+                      itemCount: categoryContent.length,
+                    ),
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                  height: 250,
-                  width: MediaQuery.of(context).size.width,
-                  // color: Colors.lightBlue,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    children: [
-                      PlaceItemSmall(
-                        tag: "recent",
-                        place: Place(
-                          name: "Банско",
-                          loves: 100,
-                          gallery: <String>[
-                            "https://firebasestorage.googleapis.com/v0/b/xplore-bulgaria-test.appspot.com/o/images%2Flocations%2Fbansko-ski-slopes.jpg?alt=media&token=51ad6ef7-ec37-42b9-9326-c521493e356e",
-                          ],
+                ],
+              ),
+              Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'recently_added',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ).tr(),
+                        IconButton(
+                          icon: Icon(
+                            Feather.arrow_right,
+                            color: Colors.grey[800],
+                          ),
+                          onPressed: () {},
                         ),
-                      ),
-                      PlaceItemSmall(
-                        tag: "recent",
-                        place: Place(
-                          name: "Разлог",
-                          loves: 100,
-                          gallery: <String>[
-                            "https://firebasestorage.googleapis.com/v0/b/xplore-bulgaria-test.appspot.com/o/images%2Flocations%2Fbansko-ski-slopes.jpg?alt=media&token=51ad6ef7-ec37-42b9-9326-c521493e356e",
-                          ],
-                        ),
-                      ),
-                      PlaceItemSmall(
-                        tag: "recent",
-                        place: Place(
-                          name: "Добринище",
-                          loves: 100,
-                          gallery: <String>[
-                            "https://firebasestorage.googleapis.com/v0/b/xplore-bulgaria-test.appspot.com/o/images%2Flocations%2Fbansko-ski-slopes.jpg?alt=media&token=51ad6ef7-ec37-42b9-9326-c521493e356e",
-                          ],
-                        ),
-                      ),
-                      PlaceItemSmall(
-                        tag: "recent",
-                        place: Place(
-                          name: "Баня",
-                          loves: 100,
-                          gallery: <String>[
-                            "https://firebasestorage.googleapis.com/v0/b/xplore-bulgaria-test.appspot.com/o/images%2Flocations%2Fbansko-ski-slopes.jpg?alt=media&token=51ad6ef7-ec37-42b9-9326-c521493e356e",
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                    ],
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    height: 200,
+                    width: MediaQuery.of(context).size.width,
+                    // color: Colors.lightBlue,
+                    child: ListView.separated(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return PlaceItemSmall(
+                          tag: "recent$index",
+                          place: categoryContent[index],
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(width: 2);
+                      },
+                      itemCount: categoryContent.length,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Наскоро добавени",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(LineIcons.arrow_right),
-                        onPressed: () {},
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  // color: Colors.lightBlue,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    children: [
-                      PlaceItemSmall(
-                        tag: "recent",
-                        place: Place(
-                          name: "Банско",
-                          loves: 100,
-                          gallery: <String>[
-                            "https://firebasestorage.googleapis.com/v0/b/xplore-bulgaria-test.appspot.com/o/images%2Flocations%2Fbansko-ski-slopes.jpg?alt=media&token=51ad6ef7-ec37-42b9-9326-c521493e356e",
-                          ],
-                        ),
-                      ),
-                      PlaceItemSmall(
-                        tag: "recent",
-                        place: Place(
-                          name: "Разлог",
-                          loves: 100,
-                          gallery: <String>[
-                            "https://firebasestorage.googleapis.com/v0/b/xplore-bulgaria-test.appspot.com/o/images%2Flocations%2Fbansko-ski-slopes.jpg?alt=media&token=51ad6ef7-ec37-42b9-9326-c521493e356e",
-                          ],
-                        ),
-                      ),
-                      PlaceItemSmall(
-                        tag: "recent",
-                        place: Place(
-                          name: "Добринище",
-                          loves: 100,
-                          gallery: <String>[
-                            "https://firebasestorage.googleapis.com/v0/b/xplore-bulgaria-test.appspot.com/o/images%2Flocations%2Fbansko-ski-slopes.jpg?alt=media&token=51ad6ef7-ec37-42b9-9326-c521493e356e",
-                          ],
-                        ),
-                      ),
-                      PlaceItemSmall(
-                        tag: "recent",
-                        place: Place(
-                          name: "Баня",
-                          loves: 100,
-                          gallery: <String>[
-                            "https://firebasestorage.googleapis.com/v0/b/xplore-bulgaria-test.appspot.com/o/images%2Flocations%2Fbansko-ski-slopes.jpg?alt=media&token=51ad6ef7-ec37-42b9-9326-c521493e356e",
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                    ],
-                  ),
-                ),
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
