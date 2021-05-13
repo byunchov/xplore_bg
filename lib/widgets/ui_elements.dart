@@ -55,6 +55,7 @@ class CustomDivider extends StatelessWidget {
   final double height;
   final Color color;
   final double radius;
+  final EdgeInsets margin;
 
   const CustomDivider({
     Key key,
@@ -62,17 +63,26 @@ class CustomDivider extends StatelessWidget {
     @required this.height,
     this.color,
     this.radius,
+    this.margin = EdgeInsets.zero,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: height,
+      width: this.width,
+      height: this.height,
+      margin: this.margin,
       decoration: BoxDecoration(
-        color: color ?? Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.circular(radius ?? 30),
+        color: this.color ?? Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(this.radius ?? 30),
       ),
     );
+  }
+}
+
+class RoundedIconButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

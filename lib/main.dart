@@ -2,29 +2,40 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:xplore_bg/pages/bookmarks.dart';
 import 'package:xplore_bg/pages/explore.dart';
 import 'package:xplore_bg/pages/landmarks.dart';
 import 'package:xplore_bg/pages/profile.dart';
+import 'package:xplore_bg/utils/config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(EasyLocalization(
     path: "assets/translations",
-    supportedLocales: [Locale("bg")],
+    supportedLocales:
+        AppConfig().appLocales.map((item) => Locale(item)).toList(),
     fallbackLocale: Locale("bg"),
     startLocale: Locale("bg"),
     useOnlyLangCode: true,
     child: MyApp(),
   ));
+
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print(context.locale);
     return MaterialApp(
       // title: 'Flutter Demo',
       supportedLocales: context.supportedLocales,
@@ -63,9 +74,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
-
-  PageController _pageController = PageController();
+  int _selectedIndex;
+  PageController _pageController;
 
   List<GButton> tabs = [];
   List<Color> colors = [
@@ -79,6 +89,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    _selectedIndex = 0;
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -92,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // ),
       body: PageView(
         controller: _pageController,
+        // physics: NeverScrollableScrollPhysics(),
         physics: NeverScrollableScrollPhysics(),
         children: [
           ExplorePage(),
@@ -148,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     _selectedIndex = index;
                   });
                   _pageController.animateToPage(index,
-                      curve: Curves.easeIn,
+                      curve: Curves.easeInQuad,
                       duration: Duration(milliseconds: 400));
                 }),
           ),

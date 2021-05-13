@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg/models/place.dart';
+import 'package:xplore_bg/pages/place_details.dart';
+import 'package:xplore_bg/utils/page_navigation.dart';
 
 class PlaceItemState extends StatelessWidget {
   final String tag;
@@ -12,6 +14,7 @@ class PlaceItemState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double _cardRaduis = 5;
+    String _tag = '$tag${place.name}';
 
     return InkWell(
       child: Container(
@@ -25,7 +28,7 @@ class PlaceItemState extends StatelessWidget {
         child: Stack(
           children: [
             Hero(
-              tag: '$tag${place.name}',
+              tag: _tag,
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
@@ -168,7 +171,9 @@ class PlaceItemState extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {},
+      onTap: () {
+        nextScreenMaterial(context, PlaceDetailsPage(tag: _tag, place: place));
+      },
     );
   }
 }

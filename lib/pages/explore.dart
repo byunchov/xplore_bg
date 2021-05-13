@@ -1,12 +1,24 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:xplore_bg/models/place.dart';
+import 'package:xplore_bg/utils/place_list.dart';
 import 'package:xplore_bg/widgets/header.dart';
 import 'package:xplore_bg/widgets/place_item_small.dart';
 
-class ExplorePage extends StatelessWidget {
+class ExplorePage extends StatefulWidget {
+  @override
+  _ExplorePageState createState() => _ExplorePageState();
+}
+
+class _ExplorePageState extends State<ExplorePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       // appBar: AppBar(
       //   elevation: 20,
@@ -27,13 +39,13 @@ class ExplorePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "Най-популярни",
+                          "most_popular",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
                             color: Colors.grey[800],
                           ),
-                        ),
+                        ).tr(),
                         IconButton(
                           icon: Icon(
                             Feather.arrow_right,
@@ -52,52 +64,20 @@ class ExplorePage extends StatelessWidget {
                     height: 250,
                     width: MediaQuery.of(context).size.width,
                     // color: Colors.lightBlue,
-                    child: ListView(
+                    child: ListView.separated(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
-                      children: [
-                        PlaceItemSmall(
-                          tag: "popular",
-                          place: Place(
-                            name: "Банско",
-                            loves: 100,
-                            gallery: <String>[
-                              "https://firebasestorage.googleapis.com/v0/b/xplore-bulgaria-test.appspot.com/o/images%2Flocations%2Fbansko-ski-slopes.jpg?alt=media&token=51ad6ef7-ec37-42b9-9326-c521493e356e",
-                            ],
-                          ),
-                        ),
-                        PlaceItemSmall(
-                          tag: "popular",
-                          place: Place(
-                            name: "Разлог",
-                            loves: 89,
-                            gallery: <String>[
-                              "http://infomreja.bg/upload/articles/images/18387/024ec2c710680539c9257aa4a27fd7d5.jpg",
-                            ],
-                          ),
-                        ),
-                        PlaceItemSmall(
-                          tag: "popular",
-                          place: Place(
-                            name: "Добринище",
-                            loves: 54,
-                            gallery: <String>[
-                              "https://visit-dobrinishte.bg/images/slider/sl1.jpg",
-                            ],
-                          ),
-                        ),
-                        PlaceItemSmall(
-                          tag: "popular",
-                          place: Place(
-                            name: "Баня",
-                            loves: 61,
-                            gallery: <String>[
-                              "https://rimskabania.com/wp-content/uploads/2016/03/Old_Roman_01.jpg",
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                      ],
+                      itemBuilder: (BuildContext context, int index) {
+                        return PlaceItemSmall(
+                          tag: "popular$index",
+                          place: categoryContent[index],
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(width: 2);
+                      },
+                      itemCount: categoryContent.length,
                     ),
                   ),
                 ],
@@ -111,13 +91,13 @@ class ExplorePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "Наскоро добавени",
+                          'recently_added',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: Colors.black,
                           ),
-                        ),
+                        ).tr(),
                         IconButton(
                           icon: Icon(
                             Feather.arrow_right,
@@ -136,52 +116,20 @@ class ExplorePage extends StatelessWidget {
                     height: 200,
                     width: MediaQuery.of(context).size.width,
                     // color: Colors.lightBlue,
-                    child: ListView(
+                    child: ListView.separated(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
-                      children: [
-                        PlaceItemSmall(
-                          tag: "recent",
-                          place: Place(
-                            name: "Банско",
-                            loves: 100,
-                            gallery: <String>[
-                              "https://firebasestorage.googleapis.com/v0/b/xplore-bulgaria-test.appspot.com/o/images%2Flocations%2Fbansko-ski-slopes.jpg?alt=media&token=51ad6ef7-ec37-42b9-9326-c521493e356e",
-                            ],
-                          ),
-                        ),
-                        PlaceItemSmall(
-                          tag: "recent",
-                          place: Place(
-                            name: "Разлог",
-                            loves: 89,
-                            gallery: <String>[
-                              "http://infomreja.bg/upload/articles/images/18387/024ec2c710680539c9257aa4a27fd7d5.jpg",
-                            ],
-                          ),
-                        ),
-                        PlaceItemSmall(
-                          tag: "recent",
-                          place: Place(
-                            name: "Добринище",
-                            loves: 54,
-                            gallery: <String>[
-                              "https://visit-dobrinishte.bg/images/slider/sl1.jpg",
-                            ],
-                          ),
-                        ),
-                        PlaceItemSmall(
-                          tag: "recent",
-                          place: Place(
-                            name: "Баня",
-                            loves: 61,
-                            gallery: <String>[
-                              "https://rimskabania.com/wp-content/uploads/2016/03/Old_Roman_01.jpg",
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                      ],
+                      itemBuilder: (BuildContext context, int index) {
+                        return PlaceItemSmall(
+                          tag: "recent$index",
+                          place: categoryContent[index],
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(width: 2);
+                      },
+                      itemCount: categoryContent.length,
                     ),
                   ),
                 ],

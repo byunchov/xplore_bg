@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:xplore_bg/utils/language_select.dart';
 import 'package:xplore_bg/widgets/ui_elements.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -20,7 +21,10 @@ class LoginScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.language_rounded),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (ctx) => SelectLanguagePage()));
+            },
           ),
         ],
       ),
@@ -71,10 +75,11 @@ class LoginScreen extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ).tr(),
-                    SizedBox(height: 25),
+                    // SizedBox(height: 25),
                     CustomDivider(
                       width: MediaQuery.of(context).size.width * 0.55,
                       height: 4,
+                      margin: EdgeInsets.only(top: 25),
                     ),
                   ],
                 ),
@@ -86,7 +91,7 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   SigninButton(
-                    btnText: tr('signin_google'),
+                    btnText: tr('signin_facebook'),
                     btnIcon: FontAwesome.facebook_f,
                     btnColor: Color(0xFF4267B2),
                     onPressed: () {
@@ -95,7 +100,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 12),
                   SigninButton(
-                    btnText: tr('signin_facebook'),
+                    btnText: tr('signin_google'),
                     btnIcon: FontAwesome.google,
                     btnColor: Colors.lightBlue,
                     onPressed: () {},

@@ -3,13 +3,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:xplore_bg/models/place.dart';
 import 'package:xplore_bg/models/state.dart';
+import 'package:xplore_bg/utils/place_list.dart';
 import 'package:xplore_bg/widgets/place_item_states.dart';
 
 class StatePlaces extends StatefulWidget {
   final StateModel stateModel;
   final Color appBarColor;
+  final String tag;
 
-  const StatePlaces({Key key, this.stateModel, this.appBarColor})
+  const StatePlaces(
+      {Key key, this.stateModel, this.appBarColor, @required this.tag})
       : super(key: key);
 
   @override
@@ -46,39 +49,42 @@ class _StatePlacesState extends State<StatePlaces> {
             expandedHeight: 180,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: false,
-              background: Stack(
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height,
-                    width: double.infinity,
-                    // decoration: BoxDecoration(
-                    //   borderRadius: BorderRadius.only(
-                    //     bottomLeft: Radius.circular(_sliverradius),
-                    //     bottomRight: Radius.circular(_sliverradius),
-                    //   ),
-                    // ),
-                    child: Image.network(
-                      widget.stateModel.thumbnail,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black38.withOpacity(0.6)
-                        ],
-                      ),
-                      // borderRadius: BorderRadius.only(
-                      //   bottomLeft: Radius.circular(_sliverradius),
-                      //   bottomRight: Radius.circular(_sliverradius),
+              background: Hero(
+                tag: widget.tag,
+                child: Stack(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: double.infinity,
+                      // decoration: BoxDecoration(
+                      //   borderRadius: BorderRadius.only(
+                      //     bottomLeft: Radius.circular(_sliverradius),
+                      //     bottomRight: Radius.circular(_sliverradius),
+                      //   ),
                       // ),
+                      child: Image.network(
+                        widget.stateModel.thumbnail,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-                ],
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black38.withOpacity(0.6)
+                          ],
+                        ),
+                        // borderRadius: BorderRadius.only(
+                        //   bottomLeft: Radius.circular(_sliverradius),
+                        //   bottomRight: Radius.circular(_sliverradius),
+                        // ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               title: Text(
                 widget.stateModel.name.toUpperCase(),
@@ -99,17 +105,9 @@ class _StatePlacesState extends State<StatePlaces> {
                 // displays the index of the current item.
                 (context, index) => PlaceItemState(
                   tag: "sate$index",
-                  place: Place(
-                    name: "Place $index",
-                    location: "town $index, Plaxe $index",
-                    loves: Random().nextInt(100) + 10,
-                    commentCount: Random().nextInt(100) + 10,
-                    gallery: <String>[
-                      "http://infomreja.bg/upload/articles/images/18387/024ec2c710680539c9257aa4a27fd7d5.jpg",
-                    ],
-                  ),
+                  place: categoryContent[index],
                 ),
-                childCount: 10,
+                childCount: categoryContent.length,
               ),
             ),
           ),

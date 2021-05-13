@@ -16,6 +16,7 @@ class StateTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final double _cardRadius = 10;
     final double _cardHeight = 150;
+    final String _tag = "sates${stateModel.name}";
 
     return InkWell(
       child: Container(
@@ -23,44 +24,60 @@ class StateTile extends StatelessWidget {
         child: Stack(
           children: [
             Hero(
-              tag: "sates${stateModel.name}",
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  // border: Border.all(color: Colors.grey[400]),
-                  borderRadius: BorderRadius.circular(_cardRadius),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black12,
-                        spreadRadius: 2.0,
-                        blurRadius: 8.0),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(_cardRadius),
-                  child: Image.network(
-                    stateModel.thumbnail,
-                    fit: BoxFit.cover,
-                    height: MediaQuery.of(context).size.height,
+              tag: _tag,
+              child: Stack(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      // border: Border.all(color: Colors.grey[400]),
+                      image: DecorationImage(
+                        image: NetworkImage(stateModel.thumbnail),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(_cardRadius),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black12,
+                            spreadRadius: 2.0,
+                            blurRadius: 8.0),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(_cardRadius),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          // color: Colors.grey[850].withOpacity(0.3),
+                          // gradient: LinearGradient(
+                          //   begin: Alignment.topCenter,
+                          //   end: Alignment.bottomCenter,
+                          //   colors: [
+                          //     Colors.black.withOpacity(0.15),
+                          //     Colors.black.withOpacity(0.4),
+                          //     Colors.black.withOpacity(0.15),
+                          //   ],
+                          // ),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.1),
+                              Colors.black.withOpacity(0.2),
+                              Colors.black.withOpacity(0.25),
+                              Colors.black.withOpacity(0.3),
+                              Colors.black.withOpacity(0.3),
+                              Colors.black.withOpacity(0.25),
+                              Colors.black.withOpacity(0.2),
+                              Colors.black.withOpacity(0.1),
+                              Colors.transparent,
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(_cardRadius),
-              child: Container(
-                decoration: BoxDecoration(
-                  // color: Colors.grey[850].withOpacity(0.3),
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black.withOpacity(0.15),
-                      Colors.black.withOpacity(0.4),
-                      Colors.black.withOpacity(0.15),
-                    ],
-                  ),
-                ),
+                ],
               ),
             ),
             Center(
@@ -85,6 +102,7 @@ class StateTile extends StatelessWidget {
               stateModel: stateModel,
               appBarColor:
                   Colors.primaries[Random().nextInt(Colors.primaries.length)],
+              tag: _tag,
             ),
           ),
         );

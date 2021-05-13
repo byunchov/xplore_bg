@@ -9,7 +9,11 @@ class BlankPage extends StatelessWidget {
   final bool divider;
 
   const BlankPage(
-      {Key key, this.heading, this.icon, this.shortText, this.divider = false})
+      {Key key,
+      @required this.heading,
+      this.icon,
+      this.shortText,
+      this.divider = false})
       : super(key: key);
 
   @override
@@ -34,14 +38,15 @@ class BlankPage extends StatelessWidget {
                   color: Colors.grey[600],
                   fontWeight: FontWeight.w600),
             ),
-            SizedBox(height: divider ? 10 : 5),
+            // SizedBox(height: divider ? 10 : 5),
             divider
                 ? CustomDivider(
                     width: MediaQuery.of(context).size.width * 0.55,
                     height: 2.5,
+                    margin: EdgeInsets.symmetric(vertical: 10),
                   )
-                : Container(),
-            SizedBox(height: divider ? 10 : 0),
+                : SizedBox(height: 5),
+            // SizedBox(height: divider ? 10 : 0),
             Text(
               shortText ?? '',
               textAlign: TextAlign.center,

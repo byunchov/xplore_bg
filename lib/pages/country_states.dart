@@ -3,9 +3,19 @@ import 'package:xplore_bg/models/state.dart';
 import 'package:xplore_bg/widgets/state_tile.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-class StatesPage extends StatelessWidget {
+class StatesPage extends StatefulWidget {
+  @override
+  _StatesPageState createState() => _StatesPageState();
+}
+
+class _StatesPageState extends State<StatesPage>
+    with AutomaticKeepAliveClientMixin<StatesPage> {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: ListView(
         padding: EdgeInsets.all(20),

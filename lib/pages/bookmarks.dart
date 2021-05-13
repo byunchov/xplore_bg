@@ -4,9 +4,18 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:xplore_bg/pages/blank_page.dart';
 
-class BookmarksPage extends StatelessWidget {
+class BookmarksPage extends StatefulWidget {
+  @override
+  _BookmarksPageState createState() => _BookmarksPageState();
+}
+
+class _BookmarksPageState extends State<BookmarksPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
       length: 2,
       initialIndex: 0,

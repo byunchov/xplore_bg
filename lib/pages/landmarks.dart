@@ -1,23 +1,42 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-import 'package:xplore_bg/pages/blank_page.dart';
 import 'package:xplore_bg/pages/categories.dart';
 import 'package:xplore_bg/pages/country_states.dart';
 
-class LandmarksPage extends StatelessWidget {
-  final List<Tab> _listTabs = <Tab>[
-    Tab(
-      child: Text('tab_categories').tr(),
-    ),
-    Tab(
-      child: Text('tab_states').tr(),
-    ),
-  ];
+class LandmarksPage extends StatefulWidget {
+  @override
+  _LandmarksPageState createState() => _LandmarksPageState();
+}
+
+class _LandmarksPageState extends State<LandmarksPage>
+    with AutomaticKeepAliveClientMixin<LandmarksPage> {
+  List<Tab> _listTabs;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _listTabs = <Tab>[
+      Tab(
+        child: Text('tab_categories').tr(),
+      ),
+      Tab(
+        child: Text('tab_states').tr(),
+      ),
+    ];
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
       length: _listTabs.length,
       initialIndex: 0,
@@ -39,10 +58,6 @@ class LandmarksPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            // BlankPage(
-            //   heading: "No categories",
-            //   icon: Feather.list,
-            // ),
             CategotiesTab(),
             StatesPage(),
           ],
