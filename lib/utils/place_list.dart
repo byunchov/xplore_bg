@@ -2,7 +2,7 @@ import 'package:xplore_bg/models/place.dart';
 
 final List<Place> categoryContent = [
   Place(
-    name: 'Банско - Ски писта "Кончето"',
+    name: 'Банско',
     location: "Банско, Благоевград",
     loves: 100,
     starRating: 4.7,
@@ -15,6 +15,8 @@ final List<Place> categoryContent = [
       'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
       'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80',
     ],
+    latitude: 41.8356993,
+    longitude: 23.4781605,
   ),
   Place(
     name: "Разлог",
@@ -24,6 +26,8 @@ final List<Place> categoryContent = [
     commentCount: 56,
     category: "Туризъм",
     subcategory: "Простотия и злобарство",
+    latitude: 41.8852605,
+    longitude: 23.4622149,
     gallery: <String>[
       "http://infomreja.bg/upload/articles/images/18387/024ec2c710680539c9257aa4a27fd7d5.jpg",
       'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
@@ -39,6 +43,8 @@ final List<Place> categoryContent = [
     commentCount: 56,
     category: "Туризъм",
     subcategory: "По-по-най простотия",
+    latitude: 41.8208305,
+    longitude: 23.5572114,
     gallery: <String>[
       "https://visit-dobrinishte.bg/images/slider/sl1.jpg",
       'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
@@ -54,6 +60,8 @@ final List<Place> categoryContent = [
     commentCount: 56,
     category: "Туризъм",
     subcategory: "Гореща вода от чопоро",
+    latitude: 41.8814919,
+    longitude: 23.5222286,
     gallery: <String>[
       "https://rimskabania.com/wp-content/uploads/2016/03/Old_Roman_01.jpg",
       'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',

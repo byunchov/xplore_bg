@@ -5,15 +5,17 @@ class Place {
   String location;
   String category;
   String subcategory;
-  double latitude;
-  double longitude;
+  double latitude; //
+  double longitude; //
   String description;
-  List<String> gallery;
-  int loves;
-  int commentCount;
-  double starRating;
+  List<String> gallery; //
+  int loves; // lovesCount
+  int commentCount; //
+  int bookmarkCount; //
+  double starRating; //
   String date;
-  String timestamp;
+  String timestamp; //
+  String locale;
 
   Place({
     this.uid,
@@ -31,5 +33,6 @@ class Place {
     this.category,
     this.subcategory,
     this.starRating,
+    this.locale,
   });
 }

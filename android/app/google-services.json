@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "318710730498",
+    "project_id": "xplore-bg",
+    "storage_bucket": "xplore-bg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318710730498:android:e99de9870a0dd3f82c7c1b",
+        "android_client_info": {
+          "package_name": "bg.destionaton.xplore_bg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "318710730498-rn6viidnvcpd6kihvr53kb24jjvdo114.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmtY3NuU1pKKNGV7K_nsPDndgUKbLJfeo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "318710730498-rn6viidnvcpd6kihvr53kb24jjvdo114.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,7 +3,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg/models/category_tile.dart';
 import 'package:xplore_bg/models/place.dart';
+import 'package:xplore_bg/pages/categories/filtering_page.dart';
 import 'package:xplore_bg/pages/place_details.dart';
+import 'package:xplore_bg/utils/custom_cached_network_image.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
 import 'package:xplore_bg/utils/place_list.dart';
 import 'package:xplore_bg/widgets/ui_elements.dart';
@@ -26,7 +28,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
         actions: [
           IconButton(
             icon: Icon(Icons.filter_list),
-            onPressed: () {},
+            onPressed: () {
+              nextScreenMaterial(context, FilteringPage());
+            },
           )
         ],
       ),
@@ -351,21 +355,31 @@ class CategoryListItem2 extends StatelessWidget {
           Positioned(
             top: 10,
             left: 5,
-            child: Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(_cardRadius),
-              ),
+            child: Hero(
+              tag: _tag,
               child: Container(
                 width: _cardHeight * 0.85,
                 height: _cardHeight * 0.85,
                 decoration: BoxDecoration(
-                  color: Colors.green,
-                  image: DecorationImage(
-                    image: NetworkImage(place.gallery[0]),
-                    fit: BoxFit.cover,
-                  ),
+                  color: Colors.grey,
+                  // image: DecorationImage(
+                  //   // image: NetworkImage(place.gallery[0]),
+                  //   // fit: BoxFit.cover,
+                  // ),
                   borderRadius: BorderRadius.circular(_cardImgRadius),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      offset: Offset(5, 5),
+                      blurRadius: 5,
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(_cardRadius),
+                  child: CustomCachedImage(
+                    imageUrl: place.gallery[0],
+                  ),
                 ),
               ),
             ),

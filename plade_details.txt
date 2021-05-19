@@ -1,0 +1,167 @@
+https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJcbaR3qWuqxQRV5k8uGxURSQ&fields=name,formatted_address,international_phone_number,geometry/location,opening_hours/weekday_text,photos,price_level,rating,reviews,url,user_ratings_total,website&key=AIzaSyDpkUJqyeoqveQoWlvQvXeNwRceopftryo
+
+{
+   "html_attributions" : [],
+   "result" : {
+      "formatted_address" : "ул. „Кир Благо Тодев“ 11, 2770 кв. Глазне, Банско, България",
+      "geometry" : {
+         "location" : {
+            "lat" : 41.842652,
+            "lng" : 23.484314
+         }
+      },
+      "international_phone_number" : "+359 88 277 7444",
+      "name" : "Leonardo Restaurant Bansko",
+      "opening_hours" : {
+         "weekday_text" : [
+            "понеделник: 12:00 ч. – 0:00 ч.",
+            "вторник: 12:00 ч. – 0:00 ч.",
+            "сряда: 12:00 ч. – 0:00 ч.",
+            "четвъртък: 12:00 ч. – 0:00 ч.",
+            "петък: 12:00 ч. – 0:00 ч.",
+            "събота: 12:00 ч. – 0:00 ч.",
+            "неделя: 12:00 ч. – 0:00 ч."
+         ]
+      },
+      "photos" : [
+         {
+            "height" : 1152,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109503463614587043615\"\u003eLeonardo Restaurant Bansko\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLIM0sMXaHJas_Wlm6bNAbVDtGjshXJ2MmdqGXjZC54Vf8F12LHj0gp4Idaqb2ctCXaGWq7oS0pxG4q6x7x_tcMMTs4RVWisUEab_oLHna36BY-eKJcBlodGMCswuaPqd-9HBt2PnXH5DJwdw-Jm5lnA96zvJIBiLlZTwvr7WOXlpar",
+            "width" : 2048
+         },
+         {
+            "height" : 1080,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109503463614587043615\"\u003eLeonardo Restaurant Bansko\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLfFGzhtpH5Z9VUP4QaB_B1IvscUYw7Mk3rP031Qq8vENfTJnS20CYfNsBc-m4vGE3jzTGAWAXh4GBwZf6nGqC8R9M7K9TGoplxbB3UC8hA-RunW7I1pn6c8jxd8WeMEoJ63lpwq74YGQGTVwaDD8OX3Wq3H79FQj0KwMk5CPLSusc6",
+            "width" : 1618
+         },
+         {
+            "height" : 4032,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/105680029151477914424\"\u003eKaloyan Peykov\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJYi4QJ4vNN4pyDcSS46wn4OswW4-3BX-LQCkbCNAiRH0XdSKRtAk7iiOlQJgPEG9bWuXbuJDNWPaLGUScEmyspjSWiDvo1uxC0066nN1H3r123He-M6GTJNVUWnG8mXK7Fycl3NO5rNxHDrKv2T5dPnNjEW3ARINxvoDqertQZFcqw",
+            "width" : 3024
+         },
+         {
+            "height" : 2248,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109503463614587043615\"\u003eLeonardo Restaurant Bansko\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwK21jqQvYQdGAATsfRnUpH2BS4NF6Y1L4lFbvkNI89KciBspLhWQ-bT4PLHLE86xtKF1153S4WZnJ1UEgYWRXxhfcq9DhOFc7qhOZPe7df1TxwnOHJ5XB5_5uunrcqAxF9fgeGIJZ7yd0smh3TXfWLXmcT_fA2N3sqo2xTVBMTuc8vI",
+            "width" : 3000
+         },
+         {
+            "height" : 1512,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109503463614587043615\"\u003eLeonardo Restaurant Bansko\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIbQkY0o0tzqgaQ_Q2GI2NWeH6altA7HmvSCzHgSIIGBTO1bGKkKsaQvfLZgyW6ZHGpyB16G-pdSmVtK-9dcoPAQ5YA4jsAG3HfEtnwPMEB4lesu5lFGEI8-ceHuEqFE0ecBXYzFV2aiHZ-UUweTj8evSdI_ypGkDHOumJZqkIo2EZ1",
+            "width" : 2016
+         },
+         {
+            "height" : 2012,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109503463614587043615\"\u003eLeonardo Restaurant Bansko\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLqzBG1tcSx8tpKQBqy8sdUly6ea_2plHBbP5GAKjwtmbY9b6tWbz6tjNZdnRR79wjCACzyOYucPa3wGWIYdYiHEhNOILgHkZmmSomb-EuIzSCbG8ia46SLHxoRkHhtARgn4OZ3u4Z0IU4Tda5qPawla5i2nOS-7ZSYxwsYo0bQTg7m",
+            "width" : 3000
+         },
+         {
+            "height" : 960,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109503463614587043615\"\u003eLeonardo Restaurant Bansko\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwKc6veZOhYWwheVjEpDNr4IPVGa6vImzfH_VKoHeKk2HDvhe_U7H351gLhi9eC6_RT8xwmSOb4JOE_EFXlWIuFAfsYhwTo79PzUu22ZGS4ZqTwCgSjmnwVldPgNusRlT6ZCRFwSU-hl53VE-rNIYrS_-OaoCospb6qn5iavyFmJFvUk",
+            "width" : 1280
+         },
+         {
+            "height" : 1019,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109503463614587043615\"\u003eLeonardo Restaurant Bansko\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIb2kI3DmSQ_cCbsZSTN8RzvX16cGDlHmFWqS9lFPUZgDTCGpb6YmGLGH6GSIHy5qWiEK2FLA2WBGcB_MQD0OHjlSUaDcGFvTmjot3ZMKisctULpuwxBDRhyTVHS__QzeGc4E_1q_8RE7Lu771mrlwco4t4pPcoOq3s4-aO2EcIBJDe",
+            "width" : 1542
+         },
+         {
+            "height" : 1512,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109503463614587043615\"\u003eLeonardo Restaurant Bansko\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIESK6Xt-lhNgr4GLvi3-CdU-1WSAsJ02JQIt8UTOV_8EKlvabH21uNCSFiLqdGuhHpOj5CIK7LbnMp-cA216lM7O4b0eAw95_6Sa1H7mb-W_cugH5wx1IM6J6sQExVR0f2NP-BEcEpAhRlaCEV7HCsSB0N9T3Ec8zEgMXlgZZ5rujC",
+            "width" : 2016
+         },
+         {
+            "height" : 1512,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109503463614587043615\"\u003eLeonardo Restaurant Bansko\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIY-eKUR15cVJIiXkYpJ8ogMzZTSctxKE62-JrkhhigusrMrnc2AVb_GzjnONKVFj2HgEtzPMQcsIjffu0Mi9Ig_l3t3xYHbta9OBi7_szayz_OWqFodtHnJpQJsEor8I6hi6fyrPNCgyAfuyjH2hdf9XFApsRCZMokPY5-oxQ1kChR",
+            "width" : 2016
+         }
+      ],
+      "price_level" : 3,
+      "rating" : 4.5,
+      "reviews" : [
+         {
+            "author_name" : "Stefan Tabandzhov",
+            "author_url" : "https://www.google.com/maps/contrib/112502511186080644576/reviews",
+            "language" : "bg",
+            "profile_photo_url" : "https://lh3.googleusercontent.com/a-/AOh14Gh_s2cLzP0-v8P-igGBCIgZRCOy0SWqyHsi_p9b_Q=s128-c0x00000000-cc-rp-mo-ba3",
+            "rating" : 5,
+            "relative_time_description" : "преди месец",
+            "text" : "Уникален ресторант и още по уникално обслужване! Препоръчвам!",
+            "time" : 1617635395
+         },
+         {
+            "author_name" : "Desislava Hristakeva",
+            "author_url" : "https://www.google.com/maps/contrib/105093781093888854410/reviews",
+            "language" : "bg",
+            "profile_photo_url" : "https://lh3.googleusercontent.com/a/AATXAJzwXjqeXXwGvIVXXv2AqOBxcp0vlhhPMksIxQSr=s128-c0x00000000-cc-rp-mo-ba3",
+            "rating" : 5,
+            "relative_time_description" : "преди 9 месеца",
+            "text" : "Страхотно място, чудесно обслежване и невероятно вкусна храна😀",
+            "time" : 1597210156
+         },
+         {
+            "author_name" : "Светлана Табакова",
+            "author_url" : "https://www.google.com/maps/contrib/110917499439762072338/reviews",
+            "language" : "bg",
+            "profile_photo_url" : "https://lh3.googleusercontent.com/a/AATXAJx9SVP9FyeY1T-McrlbL5qemzDusDt-ZOm0XrUs=s128-c0x00000000-cc-rp-mo",
+            "rating" : 5,
+            "relative_time_description" : "преди година",
+            "text" : "Перфектен италиански гурме ресторант, чудесно обслужване, невероятна храна, страхотна обстановка.Отговаря на стандартите за най-високи изисквания.Смятам, че за Банско, това е най-добрия ресторант.Без забележки, силно препоръчвам!",
+            "time" : 1581884309
+         },
+         {
+            "author_name" : "Malina Dincheva",
+            "author_url" : "https://www.google.com/maps/contrib/118092906338262713791/reviews",
+            "language" : "bg",
+            "profile_photo_url" : "https://lh3.googleusercontent.com/a/AATXAJxYOsyeJVbz6Lrn-7foSFt_lcgK-G_tX3XJtJLz=s128-c0x00000000-cc-rp-mo",
+            "rating" : 5,
+            "relative_time_description" : "преди 7 месеца",
+            "text" : "Вкусна италианска храна, перфектно обслужване и уникална атмосфера!",
+            "time" : 1600976208
+         },
+         {
+            "author_name" : "Миглена Клисарова",
+            "author_url" : "https://www.google.com/maps/contrib/107952238691020827661/reviews",
+            "language" : "bg",
+            "profile_photo_url" : "https://lh3.googleusercontent.com/a/AATXAJwO6QtagGjiuin_XgSwTd3xgJhAqOv5-JztPwuT=s128-c0x00000000-cc-rp-mo",
+            "rating" : 5,
+            "relative_time_description" : "преди година",
+            "text" : "Може би най - добрият ресторант в Банско!\nСтрахотна атмосфера, изискана обстановка, първокласно обслужване.\nИстинска наслада за сетивата.\nСмятам, че цените съответстват на качеството, което получавате.\nОпределено попада в категория - \"задължителен за посещение\"!",
+            "time" : 1577745771
+         }
+      ],
+      "url" : "https://maps.google.com/?cid=2613587984682621271",
+      "user_ratings_total" : 491,
+      "website" : "https://leonardobansko.com/?utm_source=google&utm_medium=organic&utm_campaign=gmb"
+   },
+   "status" : "OK"
+}

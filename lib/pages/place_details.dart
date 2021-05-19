@@ -1,12 +1,17 @@
-import 'dart:io';
-
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:xplore_bg/models/category_tile.dart';
 import 'package:xplore_bg/models/place.dart';
+import 'package:xplore_bg/models/restaurant.dart';
+import 'package:xplore_bg/pages/categories.dart';
+import 'package:xplore_bg/pages/restaurants.dart';
+import 'package:xplore_bg/utils/custom_cached_network_image.dart';
+import 'package:xplore_bg/utils/page_navigation.dart';
 import 'package:xplore_bg/utils/place_list.dart';
+import 'package:xplore_bg/widgets/cards.dart';
 import 'package:xplore_bg/widgets/place_item_small.dart';
 import 'package:xplore_bg/widgets/ui_elements.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -683,25 +688,23 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage> {
                       ),
                     ),
                   ),
-                  // SizedBox(height: 30),
+                  SizedBox(height: 10),
                   Text(
-                    "To Do",
+                    "Дейности",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                   CustomDivider(
-                    width: 50,
+                    width: 80,
                     height: 3,
-                    margin: EdgeInsets.symmetric(
-                      vertical: 10,
-                    ),
+                    margin: EdgeInsets.only(top: 10, bottom: 20),
                   ),
-                  Text("What you can do here......"),
-                  SizedBox(height: 30),
+                  buildPlaceActivities(),
+                  SizedBox(height: 25),
                   Text(
-                    "You may also like",
+                    "Може да харесате",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
@@ -741,6 +744,49 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage> {
       ),
     );
   }
+
+  Widget buildPlaceActivities() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: PlaceActivitiesColorCard(
+                  text: "Ресторанти",
+                  color: Colors.yellow[600],
+                  callback: () {
+                    nextScreenMaterial(
+                        context, RestaurantsPage(place: widget.place));
+                  },
+                ),
+              ),
+              SizedBox(width: 15),
+              Expanded(
+                child: PlaceActivitiesColorCard(
+                  text: "Хотели",
+                  icon: Icons.hotel_rounded,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 15),
+          PlaceActivitiesImageCard(
+            // text: "Навигация",
+            icon: Icons.navigation_rounded,
+            image: CustomCachedImage(
+              imageUrl: categoryContent[1].gallery[0],
+              fit: BoxFit.cover,
+            ),
+            callback: () {
+              print("Location clicked");
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class ImageCarousel extends StatelessWidget {
@@ -766,10 +812,14 @@ class ImageCarousel extends StatelessWidget {
         tag: this.tag,
         child: Swiper(
           itemBuilder: (BuildContext context, int index) {
-            return Image.network(
-              imgList[index],
+            return CustomCachedImage(
+              imageUrl: imgList[index],
               fit: BoxFit.fill,
             );
+            // return Image.network(
+            //   imgList[index],
+            //   fit: BoxFit.fill,
+            // );
           },
           autoplay: this.autoPlay,
           itemCount: imgList.length,
@@ -843,4 +893,9 @@ class ImageCarousel extends StatelessWidget {
       ),
     );
   }
+}
+
+class PlaceActivities extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {}
 }

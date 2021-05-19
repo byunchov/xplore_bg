@@ -61,10 +61,11 @@ class Header extends StatelessWidget {
                 ),
               ],
             ),
+            //search placeholder
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Container(
-                height: 40,
+                height: 50,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey[500], width: 0.4),
