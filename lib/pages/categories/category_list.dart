@@ -293,7 +293,7 @@ class CategoryListItem2 extends StatelessWidget {
                       Expanded(
                         child: Text(
                           // "Location with long text content here!",
-                          place.location,
+                          place.region,
                           maxLines: 1,
                           textAlign: TextAlign.left,
                           overflow: TextOverflow.ellipsis,
@@ -343,7 +343,7 @@ class CategoryListItem2 extends StatelessWidget {
                       statisticsItem(
                         context,
                         LineIcons.comment,
-                        place.commentCount.toString(),
+                        place.reviewsCount.toString(),
                         iconColor: Colors.blueGrey,
                       ),
                     ],

@@ -100,7 +100,7 @@ class PlaceItemState extends StatelessWidget {
                             width: 5,
                           ),
                           Text(
-                            place.commentCount.toString(),
+                            place.reviewsCount.toString(),
                             // "10",
                             style: TextStyle(fontSize: 15, color: Colors.white),
                           )
@@ -152,7 +152,7 @@ class PlaceItemState extends StatelessWidget {
                         SizedBox(width: 3),
                         Expanded(
                           child: Text(
-                            place.location,
+                            place.region,
                             style: TextStyle(
                               color: Colors.grey[500],
                               fontSize: 13,

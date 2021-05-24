@@ -4,6 +4,7 @@ class Review {
   var rating;
   String relativeTimeDescription;
   String text;
+  String dateAdded;
 
   Review({
     this.authorName,
@@ -11,5 +12,6 @@ class Review {
     this.rating,
     this.relativeTimeDescription,
     this.text,
+    this.dateAdded,
   });
 }

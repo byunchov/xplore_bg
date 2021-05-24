@@ -6,7 +6,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:share/share.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:xplore_bg/models/gallery.dart';
 import 'package:xplore_bg/models/restaurant.dart';
@@ -21,8 +20,9 @@ import 'package:xplore_bg/widgets/carousel.dart';
 class RestaurantDetailsPage extends StatefulWidget {
   final String tag;
   final String placeId;
+  final String locale;
 
-  RestaurantDetailsPage({this.tag, @required this.placeId});
+  RestaurantDetailsPage({this.tag, @required this.placeId, this.locale});
 
   @override
   _RestaurantDetailsPageState createState() => _RestaurantDetailsPageState();
@@ -34,11 +34,16 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
   Color _statusBarColor = Colors.transparent;
   RestaurantDetails _restaurantDetails;
   String _sharePlaceDetails;
+  bool _fetchSuccess = true;
+
+  List<Widget> _infoList;
 
   @override
   void initState() {
     super.initState();
-    fetchData();
+    fetchData().then((value) {
+      _fillInfoList();
+    });
   }
 
   @override
@@ -51,7 +56,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
 
     return Material(
       child: _restaurantDetails == null
-          ? Center(child: CircularProgressIndicator())
+          ? _loadingPlaceholder()
           : Stack(
               alignment: Alignment.topCenter,
               children: <Widget>[
@@ -67,7 +72,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
                   //     topRight: Radius.circular(18.0)),
                   onPanelSlide: (double pos) => setState(() {
                     if (pos == 1.0) {
-                      _statusBarColor = Colors.grey;
+                      _statusBarColor = Colors.white;
                     } else if (pos == 0.0) {
                       _statusBarColor = Colors.transparent;
                     }
@@ -77,17 +82,25 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
                 Positioned(
                   top: 0,
                   child: ClipRRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(
-                        width: _screenWidth,
-                        height: _statusBarHeight,
-                        color: _statusBarColor,
-                      ),
+                    child: Container(
+                      width: _screenWidth,
+                      height: _statusBarHeight,
+                      color: _statusBarColor,
                     ),
                   ),
                 ),
               ],
+            ),
+    );
+  }
+
+  Widget _loadingPlaceholder() {
+    return Center(
+      child: _fetchSuccess
+          ? CircularProgressIndicator()
+          : BlankPage(
+              heading: "Something went wrong...",
+              icon: Icons.error_outline_rounded,
             ),
     );
   }
@@ -104,49 +117,14 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
               physics: ScrollPhysics(),
               controller: sc,
               children: [
-                SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    _button(
-                      "Навигиране",
-                      Icons.directions,
-                      Colors.blue,
-                      () async => await canLaunch(_restaurantDetails.url)
-                          ? await launch(_restaurantDetails.url)
-                          : throw 'Could not launch ${_restaurantDetails.url}',
-                    ),
-                    _button(
-                      "Обади се",
-                      Icons.phone,
-                      Colors.green,
-                      () async => await canLaunch(
-                              "tel:${_restaurantDetails.phoneNumber}")
-                          ? await launch(
-                              "tel:${_restaurantDetails.phoneNumber}")
-                          : throw 'Could not launch tel:${_restaurantDetails.phoneNumber}',
-                    ),
-                    _button(
-                      "Сподели",
-                      Icons.share,
-                      Colors.amber,
-                      () {
-                        Share.share(
-                          _sharePlaceDetails,
-                          subject: _restaurantDetails.name,
-                        );
-                      },
-                    ),
-                  ],
-                ),
                 _infoSection(),
                 SizedBox(height: 10),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                   child: Text(
-                    "Рецензии",
+                    'reviews',
                     style: Theme.of(context).textTheme.headline5,
-                  ),
+                  ).tr(),
                 ),
                 _reviewSection(),
               ],
@@ -314,7 +292,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
     String url = 'https://maps.googleapis.com/maps/api/place/details/json?' +
         'place_id=${widget.placeId}&fields=name,formatted_address,international_phone_number,' +
         'geometry/location,opening_hours/weekday_text,photos,price_level,rating,reviews,' +
-        'url,user_ratings_total,website&key=${AppConfig().mapsAPIKey}';
+        'url,user_ratings_total,website&language=${widget.locale}&key=${AppConfig().mapsAPIKey}';
 
     http.Response response = await http.get(url);
 
@@ -325,20 +303,23 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
 
       if (result == null) {
         print("Empty result!");
+        setState(() {
+          _fetchSuccess = false;
+        });
       } else {
         var details = RestaurantDetails(
-          name: result['name'],
-          address: result['formatted_address'],
-          phoneNumber: result['international_phone_number'],
-          lat: result['geometry']['location']['lat'],
-          lng: result['geometry']['location']['lng'],
+          name: result['name'] ?? "Name",
+          address: result['formatted_address'] ?? "",
+          phoneNumber: result['international_phone_number'] ?? "",
+          lat: result['geometry']['location']['lat'] ?? 0,
+          lng: result['geometry']['location']['lng'] ?? 0,
           openingHours: result['opening_hours'] == null
               ? []
               : result['opening_hours']['weekday_text'] ?? [],
-          rating: result['rating'],
-          url: result['url'],
-          totalRatings: result['user_ratings_total'],
-          website: result['website'],
+          rating: result['rating'] ?? 1.0,
+          url: result['url'] ?? "",
+          totalRatings: result['user_ratings_total'] ?? 0,
+          website: result['website'] ?? "",
         );
 
         var pl =
@@ -397,6 +378,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
           _restaurantDetails = details;
           _sharePlaceDetails =
               "${details.name}\n${details.phoneNumber}\n${details.url}";
+          _fetchSuccess = true;
         });
       }
     }
@@ -477,22 +459,75 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
   Widget _infoSection() {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [],
-          ),
+        SizedBox(height: 30),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _button(
+              "Навигиране",
+              Icons.directions,
+              Colors.blue,
+              () async => await canLaunch(_restaurantDetails.url)
+                  ? await launch(_restaurantDetails.url)
+                  : throw 'Could not launch ${_restaurantDetails.url}',
+            ),
+            _button(
+              "Обади се",
+              Icons.phone,
+              Colors.green,
+              () async => await canLaunch(
+                      "tel:${_restaurantDetails.phoneNumber}")
+                  ? await launch("tel:${_restaurantDetails.phoneNumber}")
+                  : throw 'Could not launch tel:${_restaurantDetails.phoneNumber}',
+            ),
+            _button(
+              "Сподели",
+              Icons.share,
+              Colors.amber,
+              () {
+                Share.share(
+                  _sharePlaceDetails,
+                  subject: _restaurantDetails.name,
+                );
+              },
+            ),
+          ],
+        ),
+        SizedBox(height: 30),
+        Divider(),
+        ListView.separated(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: _infoList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return _infoList[index];
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider();
+          },
         ),
         Divider(),
-        ListTile(
-          title: Text(_restaurantDetails.address),
-          leading: Icon(Feather.map_pin),
-          onTap: () async => await canLaunch(_restaurantDetails.url)
-              ? await launch(_restaurantDetails.url)
-              : throw 'Could not launch ${_restaurantDetails.url}',
-        ),
-        Divider(),
+      ],
+    );
+  }
+
+  void _fillInfoList() {
+    List<Widget> list = [];
+
+    // add place address
+    list.add(
+      ListTile(
+        title: Text(_restaurantDetails.address),
+        leading: Icon(Feather.map_pin),
+        onTap: () async => await canLaunch(_restaurantDetails.url)
+            ? await launch(_restaurantDetails.url)
+            : throw 'Could not launch ${_restaurantDetails.url}',
+      ),
+    );
+
+    // add place phone number
+    if (_restaurantDetails.phoneNumber.isNotEmpty) {
+      list.add(
         ListTile(
           title: Text(_restaurantDetails.phoneNumber),
           leading: Icon(Icons.phone),
@@ -501,10 +536,15 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
               ? await launch("tel:${_restaurantDetails.phoneNumber}")
               : throw 'Could not launch tel:${_restaurantDetails.phoneNumber}',
         ),
-        Divider(),
+      );
+    }
+
+    // add place website
+    if (_restaurantDetails.website.isNotEmpty) {
+      list.add(
         ListTile(
           title: Text(
-            _restaurantDetails.website ?? "",
+            _restaurantDetails.website,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -513,26 +553,32 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
               ? await launch(_restaurantDetails.website)
               : throw 'Could not launch ${_restaurantDetails.website}',
         ),
-        Divider(),
-        _restaurantDetails.openingHours.length == 0
-            ? Container()
-            : ExpansionTile(
-                title: Text("Рботно време"),
-                leading: Icon(Icons.access_time),
-                children: [
-                    ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: _restaurantDetails.openingHours.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          title: Text(_restaurantDetails.openingHours[index]),
-                        );
-                      },
-                    ),
-                  ]),
-        Divider(),
-      ],
-    );
+      );
+    }
+
+    if (_restaurantDetails.openingHours.length != 0) {
+      list.add(
+        ExpansionTile(
+          title: Text("opening_hours").tr(),
+          leading: Icon(Icons.access_time),
+          children: [
+            ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: _restaurantDetails.openingHours.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  title: Text(_restaurantDetails.openingHours[index]),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    setState(() {
+      _infoList = list;
+    });
   }
 }

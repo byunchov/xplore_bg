@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:http/http.dart' as http;
 import 'package:xplore_bg/models/place.dart';
 import 'package:xplore_bg/models/restaurant.dart';
@@ -13,11 +13,13 @@ import 'package:xplore_bg/utils/config.dart';
 import 'package:xplore_bg/utils/custom_cached_network_image.dart';
 import 'package:xplore_bg/utils/maps_pin_converter.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
-import 'package:xplore_bg/widgets/ui_elements.dart';
 
 class RestaurantsPage extends StatefulWidget {
   final Place place;
-  RestaurantsPage({Key key, @required this.place}) : super(key: key);
+  final String locale;
+
+  RestaurantsPage({Key key, @required this.place, this.locale})
+      : super(key: key);
 
   @override
   _RestaurantsPageState createState() => _RestaurantsPageState();
@@ -65,7 +67,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
     String dataUrl =
         'https://maps.googleapis.com/maps/api/place/nearbysearch/json' +
             '?location=${widget.place.latitude},${widget.place.longitude}' +
-            '&radius=5000&type=restaurant&key=$_mapAPIKey';
+            '&radius=5000&type=restaurant&language=${widget.locale}&key=$_mapAPIKey';
 
     // print(url);
 
@@ -99,12 +101,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
                 0.0,
             priceLevel: decodedData['results'][i]['price_level'] ?? 0,
             thumbnail: thumb,
-            // openNow: decodedData['results'][i]['opening_hours'] != null
-            //     ? decodedData['results'][i]['opening_hours']['open_now'] ?? true
-            //     : false,
           );
-
-          // if()
 
           _alldata.add(restaurant);
           _alldata.sort((a, b) => b.rating.compareTo(a.rating));
@@ -165,8 +162,6 @@ class _RestaurantsPageState extends State<RestaurantsPage>
     super.initState();
     _swiperController = SwiperController()..addListener(_onScroll);
 
-    // _pageController = PageController(initialPage: 1, viewportFraction: 0.8)
-    //   ..addListener(_onScroll);
     setMarkerIcon();
     // animateCameraAfterInitialization();
     getData().then((value) {
@@ -176,7 +171,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
   }
 
   _restaurantListItem(BuildContext context, int index) {
-    double _screenWidth = MediaQuery.of(context).size.width;
+    // double _screenWidth = MediaQuery.of(context).size.width;
     double _cardHeight = 220;
     double _cardRadius = 10;
 
@@ -189,6 +184,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
           RestaurantDetailsPage(
             placeId: id,
             tag: id,
+            locale: widget.locale,
           ),
         );
       },
@@ -226,7 +222,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
                   children: [
                     Text(
                       _alldata[index].name,
-                      maxLines: 2,
+                      maxLines: 1,
                       textAlign: TextAlign.left,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -247,7 +243,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
                         Expanded(
                           child: Text(
                             _alldata[index].address,
-                            maxLines: 2,
+                            maxLines: 1,
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -833,7 +829,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
                       padding: const EdgeInsets.only(
                           left: 15, top: 10, bottom: 10, right: 15),
                       child: Text(
-                        '${widget.place.name} - Nearby Restaurants',
+                        "${widget.place.name} - ${tr('nearby_rest')}",
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),

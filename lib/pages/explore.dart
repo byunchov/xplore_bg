@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:xplore_bg/bloc/feautured_bloc.dart';
 import 'package:xplore_bg/models/place.dart';
 import 'package:xplore_bg/pages/place_details.dart';
 import 'package:xplore_bg/utils/custom_cached_network_image.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
 import 'package:xplore_bg/utils/place_list.dart';
+import 'package:xplore_bg/widgets/featured_widget.dart';
 import 'package:xplore_bg/widgets/header.dart';
+import 'package:xplore_bg/widgets/hero_widget.dart';
 import 'package:xplore_bg/widgets/place_item_small.dart';
 import 'package:xplore_bg/widgets/ui_elements.dart';
 
@@ -21,6 +25,14 @@ class _ExplorePageState extends State<ExplorePage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero).then((_) {
+      context.read<FeaturedBloc>().fetchData();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,25 +48,15 @@ class _ExplorePageState extends State<ExplorePage>
           child: Column(
             children: [
               Header(),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 260,
-                child: Swiper(
-                  itemCount: categoryContent.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return EditorsChoice(
-                      place: categoryContent[index],
-                    );
-                  },
-                  loop: false,
-                  viewportFraction: 1.0,
-                  scale: 0.8,
-                  // pagination: SwiperPagination(),
-                ),
+              FeaturedPlaces(),
+              SizedBox(height: 5),
+              FlatButton(
+                onPressed: () {
+                  context.read<FeaturedBloc>().fetchData();
+                },
+                child: Text("Refresh data!"),
               ),
-              SizedBox(
-                height: 5,
-              ),
+              SizedBox(height: 5),
               Column(
                 children: [
                   Container(
@@ -184,7 +186,7 @@ class EditorsChoice extends StatelessWidget {
       child: InkWell(
         child: Stack(
           children: <Widget>[
-            Hero(
+            HeroWidget(
               tag: 'featured${this.place.timestamp}',
               child: Container(
                 height: 220,
@@ -231,7 +233,7 @@ class EditorsChoice extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         // "Title with long text content here!",
-                        place.name,
+                        place.name ?? "name",
                         maxLines: 1,
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
@@ -253,7 +255,7 @@ class EditorsChoice extends StatelessWidget {
                           Expanded(
                             child: Text(
                               // "Location with long text content here!",
-                              place.location,
+                              place.region ?? "region",
                               maxLines: 1,
                               textAlign: TextAlign.left,
                               overflow: TextOverflow.ellipsis,
@@ -291,7 +293,7 @@ class EditorsChoice extends StatelessWidget {
                             statisticsItem(
                               context,
                               LineIcons.comment,
-                              this.place.commentCount.toString(),
+                              this.place.reviewsCount.toString(),
                               iconColor: Colors.blueGrey,
                             ),
                           ],
@@ -305,7 +307,7 @@ class EditorsChoice extends StatelessWidget {
           ],
         ),
         onTap: () {
-          nextScreenMaterial(
+          nextScreenHero(
               context,
               PlaceDetailsPage(
                 tag: "featured${this.place.timestamp}",

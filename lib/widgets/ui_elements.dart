@@ -5,6 +5,7 @@ class SigninButton extends StatelessWidget {
   final String btnText;
   final Color btnColor;
   final dynamic onPressed;
+  final double buttonHeight;
 
   const SigninButton({
     Key key,
@@ -12,6 +13,7 @@ class SigninButton extends StatelessWidget {
     @required this.btnIcon,
     @required this.btnColor,
     @required this.onPressed,
+    this.buttonHeight = 45.0,
   }) : super(key: key);
 
   @override
@@ -19,27 +21,38 @@ class SigninButton extends StatelessWidget {
     return InkWell(
       child: Container(
         width: MediaQuery.of(context).size.width * 0.8,
-        height: 45,
+        height: this.buttonHeight,
         decoration: BoxDecoration(
           color: btnColor,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
-              btnIcon,
-              size: 21,
-              color: Colors.white,
-            ),
-            SizedBox(width: 10),
-            Text(
-              btnText,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+            Padding(
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: Icon(
+                btnIcon,
+                size: this.buttonHeight * 0.48, // 21
                 color: Colors.white,
+              ),
+            ),
+            CustomDivider(
+              height: this.buttonHeight * 0.36,
+              width: 1,
+              color: Colors.grey[350],
+              margin: EdgeInsets.only(right: 15),
+            ),
+            // SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                btnText,
+                style: TextStyle(
+                  fontSize: this.buttonHeight * 0.36, //16.5
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
               ),
             ),
           ],
