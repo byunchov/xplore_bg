@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:xplore_bg/models/review.dart';
 import 'package:xplore_bg/utils/custom_cached_network_image.dart';
 
@@ -33,7 +32,7 @@ class ReviewCard extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: 7),
+              SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +50,7 @@ class ReviewCard extends StatelessWidget {
                     ),
                     SizedBox(height: 3),
                     Text(
-                      review.relativeTimeDescription,
+                      review.relativeTimeDescription ?? review.dateAdded,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(

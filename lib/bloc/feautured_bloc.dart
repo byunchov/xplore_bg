@@ -50,7 +50,7 @@ class FeaturedBloc with ChangeNotifier {
     return ids;
     // return featuredList;
   }
-
+  // this is the ONE XD
   Future<List<Place>> _getPlaceData() async {
     List<Place> places = [];
     final _ref = firestore.collection('featured').doc('featured_list');
@@ -74,7 +74,6 @@ class FeaturedBloc with ChangeNotifier {
       p.placeTranslation = PlaceTranslation.fromFirebase(trData);
       places.add(p);
     }
-    print(places);
 
     return places;
   }

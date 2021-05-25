@@ -174,7 +174,7 @@ class UserProfileUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SigninBloc _signinBloc = context.read<SigninBloc>();
+    final SigninBloc _signinBloc = context.watch<SigninBloc>();
 
     double decorationThickness = 10;
     double rDecoration = this.avatarRadius + decorationThickness;

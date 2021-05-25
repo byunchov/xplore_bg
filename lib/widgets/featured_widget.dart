@@ -6,6 +6,9 @@ import 'package:xplore_bg/bloc/feautured_bloc.dart';
 import 'package:xplore_bg/pages/explore.dart';
 
 class FeaturedPlaces extends StatefulWidget {
+  final int initialPosition;
+
+  const FeaturedPlaces({Key key, this.initialPosition = 1}) : super(key: key);
   @override
   _FeaturedPlacesState createState() => _FeaturedPlacesState();
 }
@@ -24,8 +27,7 @@ class _FeaturedPlacesState extends State<FeaturedPlaces> {
           : Swiper(
               itemCount: featuredBloc.data.length,
               itemBuilder: (BuildContext context, int index) {
-                print(
-                    "${featuredBloc.data[index].latitude}|${featuredBloc.data[index].longitude}");
+                print("rebuild feat swiper");
                 return EditorsChoice(
                   place: featuredBloc.data[index],
                 );

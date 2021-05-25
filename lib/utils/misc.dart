@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 String removeHtmlTags(String htmlText) {
   RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
@@ -12,6 +13,16 @@ String removeEscapedHtml(String htmlText) {
   return htmlText.replaceAll(exp, '');
 }
 
+String getTimestamp() {
+  final DateTime now = DateTime.now();
+  return DateFormat('yyyyMMddTHHmmss').format(now);
+}
+
+String parseDate(String date, String locale) {
+  final dt = DateTime.parse(date);
+  return DateFormat.yMd(locale).format(dt);
+}
+
 void showSnackbar(BuildContext context, String message) {
   Scaffold.of(context).showSnackBar(
     SnackBar(
@@ -19,7 +30,7 @@ void showSnackbar(BuildContext context, String message) {
         alignment: Alignment.centerLeft,
         height: 60,
         child: Text(
-          message,
+          message.toString(),
           style: TextStyle(
             fontSize: 14,
           ),

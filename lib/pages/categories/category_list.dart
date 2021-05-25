@@ -8,6 +8,7 @@ import 'package:xplore_bg/pages/place_details.dart';
 import 'package:xplore_bg/utils/custom_cached_network_image.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
 import 'package:xplore_bg/utils/place_list.dart';
+import 'package:xplore_bg/widgets/hero_widget.dart';
 import 'package:xplore_bg/widgets/ui_elements.dart';
 
 class CategoryListPage extends StatefulWidget {
@@ -234,7 +235,7 @@ class CategoryListItem2 extends StatelessWidget {
     final double _cardHeight = 150;
     final double _cardRadius = 5;
     final double _cardImgRadius = 5;
-    final String _tag = '${place.category}${place.name}';
+    final String _tag = '${place.category}${UniqueKey().toString()}';
 
     return InkWell(
       onTap: () {
@@ -271,7 +272,7 @@ class CategoryListItem2 extends StatelessWidget {
                 children: [
                   Text(
                     // "Title with long text content here!",
-                    place.name,
+                    place.placeTranslation.name,
                     maxLines: 1,
                     textAlign: TextAlign.left,
                     overflow: TextOverflow.ellipsis,
@@ -355,7 +356,7 @@ class CategoryListItem2 extends StatelessWidget {
           Positioned(
             top: 10,
             left: 5,
-            child: Hero(
+            child: HeroWidget(
               tag: _tag,
               child: Container(
                 width: _cardHeight * 0.85,

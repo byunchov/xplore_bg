@@ -5,9 +5,13 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:xplore_bg/bloc/feautured_bloc.dart';
+import 'package:xplore_bg/bloc/popular_places_bloc.dart';
+import 'package:xplore_bg/bloc/recent_places_bloc.dart';
 import 'package:xplore_bg/models/place.dart';
 import 'package:xplore_bg/pages/place_details.dart';
+import 'package:xplore_bg/pages/show_more.page.dart';
 import 'package:xplore_bg/utils/custom_cached_network_image.dart';
+import 'package:xplore_bg/utils/loading_cards.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
 import 'package:xplore_bg/utils/place_list.dart';
 import 'package:xplore_bg/widgets/featured_widget.dart';
@@ -23,20 +27,25 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage>
     with AutomaticKeepAliveClientMixin {
+  String _locale;
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero).then((_) {
+    Future.delayed(Duration(milliseconds: 100)).then((_) {
       context.read<FeaturedBloc>().fetchData();
+      context.read<PopularPlacesBloc>().fetchData(_locale);
+      context.read<RecentlyAddedPlacesBloc>().fetchData(_locale);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    _locale = context.locale.toString() ?? 'bg';
     return Scaffold(
       // appBar: AppBar(
       //   elevation: 20,
@@ -57,114 +66,180 @@ class _ExplorePageState extends State<ExplorePage>
                 child: Text("Refresh data!"),
               ),
               SizedBox(height: 5),
-              Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "most_popular",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.grey[800],
-                          ),
-                        ).tr(),
-                        IconButton(
-                          icon: Icon(
-                            Feather.arrow_right,
-                            color: Colors.grey[800],
-                          ),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+              PopularPlaces(
+                cardHeight: 250,
+                sectionHeader: tr('most_popular'),
+                onHeaderClick: () {
+                  nextScreenMaterial(
+                      context,
+                      ShowMorePage(
+                        page: "popular",
+                        title: tr('most_popular'),
+                      ));
+                },
               ),
-              Row(
-                children: [
-                  Container(
-                    height: 250,
-                    width: MediaQuery.of(context).size.width,
-                    // color: Colors.lightBlue,
-                    child: ListView.separated(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return PlaceItemSmall(
-                          tag: "popular$index",
-                          place: categoryContent[index],
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(width: 2);
-                      },
-                      itemCount: categoryContent.length,
-                    ),
-                  ),
-                ],
+              RecentlyAddedPlaces(
+                cardHeight: 220,
+                sectionHeader: tr('recently_added'),
+                onHeaderClick: () {},
               ),
-              Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'recently_added',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
-                        ).tr(),
-                        IconButton(
-                          icon: Icon(
-                            Feather.arrow_right,
-                            color: Colors.grey[800],
-                          ),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                    height: 200,
-                    width: MediaQuery.of(context).size.width,
-                    // color: Colors.lightBlue,
-                    child: ListView.separated(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return PlaceItemSmall(
-                          tag: "recent$index",
-                          place: categoryContent[index],
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(width: 2);
-                      },
-                      itemCount: categoryContent.length,
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class PopularPlaces extends StatelessWidget {
+  final double cardHeight;
+  final String sectionHeader;
+  final Function onHeaderClick;
+
+  const PopularPlaces({
+    Key key,
+    this.cardHeight = 250,
+    @required this.sectionHeader,
+    @required this.onHeaderClick,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.watch<PopularPlacesBloc>();
+    return Column(
+      children: [
+        Column(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    this.sectionHeader,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Feather.arrow_right,
+                      color: Colors.grey[800],
+                    ),
+                    onPressed: this.onHeaderClick,
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+        Row(
+          children: [
+            Container(
+              height: this.cardHeight,
+              width: MediaQuery.of(context).size.width,
+              // color: Colors.lightBlue,
+              child: ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: bloc.data.isEmpty ? 5 : bloc.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  if (bloc.data.isEmpty)
+                    return SmallLoadingCard(
+                        width: MediaQuery.of(context).size.width * 0.42);
+                  return PlaceItemSmall(
+                    tag: "popular",
+                    place: bloc.data[index],
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(width: 2);
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class RecentlyAddedPlaces extends StatelessWidget {
+  final double cardHeight;
+  final String sectionHeader;
+  final Function onHeaderClick;
+
+  const RecentlyAddedPlaces({
+    Key key,
+    this.cardHeight = 250,
+    @required this.sectionHeader,
+    @required this.onHeaderClick,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.watch<RecentlyAddedPlacesBloc>();
+    return Column(
+      children: [
+        Column(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    this.sectionHeader,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Feather.arrow_right,
+                      color: Colors.grey[800],
+                    ),
+                    onPressed: this.onHeaderClick,
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+        Row(
+          children: [
+            Container(
+              height: this.cardHeight,
+              width: MediaQuery.of(context).size.width,
+              // color: Colors.lightBlue,
+              child: ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: bloc.data.isEmpty ? 5 : bloc.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  if (bloc.data.isEmpty)
+                    return SmallLoadingCard(
+                        width: MediaQuery.of(context).size.width * 0.42);
+                  return PlaceItemSmall(
+                    tag: "popular",
+                    place: bloc.data[index],
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(width: 2);
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -233,7 +308,7 @@ class EditorsChoice extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         // "Title with long text content here!",
-                        place.name ?? "name",
+                        place.placeTranslation.name ?? "name",
                         maxLines: 1,
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,

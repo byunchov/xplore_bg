@@ -20,6 +20,9 @@ class Place {
   String locale;
   String region;
   PlaceTranslation placeTranslation;
+  String categoryTag;
+  String regionTag;
+  String subcategoryTag;
 
   Place({
     this.uid,
@@ -36,18 +39,21 @@ class Place {
     this.date,
     this.timestamp,
     this.category,
+    this.categoryTag,
     this.subcategory,
+    this.subcategoryTag,
+    this.region,
+    this.regionTag,
     this.starRating,
     this.locale,
-    this.region,
     this.placeTranslation,
   });
 
   factory Place.fromFirestore(DocumentSnapshot snapshot, String locale) {
     var data = snapshot.data();
     return Place(
-      latitude: data['coordinates']['lat'] as double,
-      longitude: data['coordinates']['lng'] as double,
+      latitude: (data['coordinates']['lat'] ?? 0).toDouble(),
+      longitude: (data['coordinates']['lng'] ?? 0).toDouble(),
       gallery: List<String>.from(data['gallery']),
       timestamp: data['timestamp'] as String,
       region: data['region_tr'][locale] as String,
@@ -56,7 +62,10 @@ class Place {
       reviewsCount: data['reviews_count'] as int ?? 0,
       loves: data['loves_count'] as int,
       bookmarksCount: data['bookmarks_count'] as int,
-      starRating: data['rating'] as double ?? 0.0,
+      starRating: (data['rating'] ?? 0.0).toDouble(),
+      categoryTag: data['category'] as String,
+      subcategoryTag: data['subcategory'] as String,
+      regionTag: data['region'] as String,
     );
   }
 }

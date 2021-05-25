@@ -299,6 +299,10 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _afterSignIn() {
-    nextScreenReplaceMaterial(context, HomePage());
+    if (widget.tag == null) {
+      nextScreenReplaceMaterial(context, HomePage());
+    } else {
+      Navigator.pop(context);
+    }
   }
 }

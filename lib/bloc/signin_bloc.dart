@@ -196,7 +196,7 @@ class SigninBloc extends ChangeNotifier {
     await sp.setString('sign_in_provider', _signInProvider);
     await sp.setInt('loved_count', _lovedCount);
     await sp.setInt('bookmarks_count', _bookmarksCount);
-    print("saveDataToSP() called.");
+    // print("saveDataToSP() called.");
   }
 
   Future getDataFromSP() async {
@@ -210,7 +210,7 @@ class SigninBloc extends ChangeNotifier {
     _lovedCount = sp.getInt('loved_count');
     _bookmarksCount = sp.getInt('bookmarks_count');
     notifyListeners();
-    print("getDataFromSP() $_name");
+    // print("getDataFromSP() $_name");
   }
 
   Future getUserDataFromFirebase(uid) async {

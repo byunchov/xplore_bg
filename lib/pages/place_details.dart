@@ -1,16 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:xplore_bg/bloc/bookmark_bloc.dart';
+import 'package:xplore_bg/bloc/signin_bloc.dart';
+import 'package:xplore_bg/bloc/similar_places_bloc.dart';
+import 'package:xplore_bg/models/icon_data.dart';
 import 'package:xplore_bg/models/place.dart';
 import 'package:xplore_bg/pages/restaurants.dart';
 import 'package:xplore_bg/pages/reviews/reviews.dart';
 import 'package:xplore_bg/utils/config.dart';
 import 'package:xplore_bg/utils/custom_cached_network_image.dart';
+import 'package:xplore_bg/utils/loading_cards.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
 import 'package:xplore_bg/utils/place_list.dart';
+import 'package:xplore_bg/utils/popup_dialogs.dart';
 import 'package:xplore_bg/widgets/cards.dart';
 import 'package:xplore_bg/widgets/hero_widget.dart';
 import 'package:xplore_bg/widgets/place_item_small.dart';
@@ -143,38 +151,10 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
           ),
           _buildPlaceActivities(context),
           SizedBox(height: 25),
-          Text(
-            "Може да харесате",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          CustomDivider(
-            width: 120,
-            height: 3,
-            margin: EdgeInsets.symmetric(vertical: 10),
-          ),
-          Container(
-            height: 210,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                // return (index == listSimilar.length)
-                //     ? SizedBox(width: 15)
-                //     : PlaceItemSmall(
-                //         place: listSimilar[index],
-                //         tag: "similar",
-                //       );
-                return PlaceItemSmall(
-                  place: categoryContent[index],
-                  tag: "similar${UniqueKey().toString()}$index",
-                );
-              },
-              itemCount: categoryContent.length,
-            ),
+
+          SimilarPlaces(
+            placeId: widget.place.timestamp,
+            category: widget.place.categoryTag,
           ),
         ],
       ),
@@ -328,26 +308,38 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
                     Column(
                       children: [
                         IconButton(
-                          icon: Icon(
-                            Feather.heart,
-                            size: 21,
+                          icon: ActionIcon(
+                            field: 'loved_places',
+                            timestamp: widget.place.timestamp,
+                            iconStyle: LoveIcon(),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            handleLoveClick();
+                          },
                         ),
-                        Text(widget.place.loves.toString()),
+                        ActionIconText(
+                          field: 'loves_count',
+                          timestamp: widget.place.timestamp,
+                        ),
                       ],
                     ),
                     SizedBox(width: 5),
                     Column(
                       children: [
                         IconButton(
-                          icon: Icon(
-                            Feather.bookmark,
-                            size: 21,
+                          icon: ActionIcon(
+                            field: 'bookmarked_places',
+                            timestamp: widget.place.timestamp,
+                            iconStyle: BookmarkIcon(),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            handleBookmarkClick();
+                          },
                         ),
-                        Text(widget.place.bookmarksCount.toString()),
+                        ActionIconText(
+                          field: 'bookmarks_count',
+                          timestamp: widget.place.timestamp,
+                        ),
                       ],
                     ),
                     Column(
@@ -355,13 +347,20 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
                         IconButton(
                           icon: Icon(
                             LineIcons.comments,
-                            size: 21,
+                            size: actionIconSize,
                           ),
                           onPressed: () {
-                            nextScreenMaterial(context, ReviewsPage());
+                            nextScreenMaterial(
+                                context,
+                                ReviewsPage(
+                                  place: widget.place,
+                                ));
                           },
                         ),
-                        Text(widget.place.reviewsCount.toString()),
+                        ActionIconText(
+                          field: 'reviews_count',
+                          timestamp: widget.place.timestamp,
+                        ),
                       ],
                     ),
                   ],
@@ -439,6 +438,98 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
           ),
         ],
       ),
+    );
+  }
+
+  void handleLoveClick() {
+    bool _guestUser = context.read<SigninBloc>().guestUser;
+
+    if (_guestUser == true) {
+      showLoginDialog(context);
+    } else {
+      context.read<BookmarkBloc>().onLoveIconClick(widget.place.timestamp);
+    }
+  }
+
+  void handleBookmarkClick() {
+    bool _guestUser = context.read<SigninBloc>().guestUser;
+
+    if (_guestUser == true) {
+      showLoginDialog(context);
+    } else {
+      context.read<BookmarkBloc>().onBookmarkIconClick(widget.place.timestamp);
+    }
+  }
+}
+
+class SimilarPlaces extends StatefulWidget {
+  final String category;
+  final String placeId;
+  const SimilarPlaces({
+    Key key,
+    @required this.category,
+    @required this.placeId,
+  }) : super(key: key);
+
+  @override
+  _SimilarPlacesState createState() => _SimilarPlacesState();
+}
+
+class _SimilarPlacesState extends State<SimilarPlaces> {
+  String _locale;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 100)).then((_) {
+      context
+          .read<SimilarPlacesBloc>()
+          .fetchData(widget.placeId, widget.category, _locale);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _locale = context.locale.toString();
+    final bloc = context.watch<SimilarPlacesBloc>();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Може да харесате",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        CustomDivider(
+          width: 120,
+          height: 3,
+          margin: EdgeInsets.symmetric(vertical: 10),
+        ),
+        Container(
+          height: 230,
+          width: MediaQuery.of(context).size.width,
+          child: ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            itemCount: bloc.data.isEmpty ? 5 : bloc.data.length,
+            itemBuilder: (BuildContext context, int index) {
+              if (bloc.data.isEmpty)
+                return SmallLoadingCard(
+                    width: MediaQuery.of(context).size.width * 0.42);
+              return PlaceItemSmall(
+                place: bloc.data[index],
+                tag: "similar${UniqueKey().toString()}${widget.placeId}",
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return SizedBox(width: 2);
+            },
+          ),
+        ),
+      ],
     );
   }
 }
@@ -537,6 +628,69 @@ class ImageCarousel extends StatelessWidget {
         //   padding: EdgeInsets.all(20),
         // ),
       ),
+    );
+  }
+}
+
+class ActionIcon extends StatelessWidget {
+  final String field;
+  // final String uid;
+  final String timestamp;
+  final dynamic iconStyle;
+
+  const ActionIcon({
+    Key key,
+    @required this.field,
+    // @required this.uid,
+    @required this.timestamp,
+    @required this.iconStyle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final firestore = FirebaseFirestore.instance;
+    final sb = context.watch<SigninBloc>();
+
+    if (sb.isSignedIn == false) return this.iconStyle.normal;
+    return StreamBuilder(
+      stream: firestore.collection('users').doc(sb.uid).snapshots(),
+      builder: (context, snap) {
+        if (sb.uid == null) return this.iconStyle.normal;
+        if (!snap.hasData) return this.iconStyle.normal;
+        List data = snap.data[field];
+
+        if (data.contains(timestamp)) {
+          return this.iconStyle.bold;
+        } else {
+          return this.iconStyle.normal;
+        }
+      },
+    );
+  }
+}
+
+class ActionIconText extends StatelessWidget {
+  final String field;
+  final String timestamp;
+
+  const ActionIconText({
+    Key key,
+    @required this.field,
+    @required this.timestamp,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final firestore = FirebaseFirestore.instance;
+    final sb = context.watch<SigninBloc>();
+
+    return StreamBuilder(
+      stream: firestore.collection('locations').doc(this.timestamp).snapshots(),
+      builder: (context, snap) {
+        if (!snap.hasData) return Text('na');
+        int data = snap.data[this.field] as int;
+        return Text(data.toString());
+      },
     );
   }
 }

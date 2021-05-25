@@ -3,6 +3,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg/models/place.dart';
 import 'package:xplore_bg/pages/place_details.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
+import 'package:xplore_bg/widgets/hero_widget.dart';
 
 class PlaceItemState extends StatelessWidget {
   final String tag;
@@ -14,7 +15,7 @@ class PlaceItemState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double _cardRaduis = 5;
-    String _tag = '$tag${place.name}';
+    String _tag = '$tag${place.timestamp}';
 
     return InkWell(
       child: Container(
@@ -27,7 +28,7 @@ class PlaceItemState extends StatelessWidget {
             color: Colors.grey[300], borderRadius: BorderRadius.circular(10)),
         child: Stack(
           children: [
-            Hero(
+            HeroWidget(
               tag: _tag,
               child: Container(
                 width: MediaQuery.of(context).size.width,
@@ -77,7 +78,6 @@ class PlaceItemState extends StatelessWidget {
                           ),
                           Text(
                             place.loves.toString(),
-                            // "10",
                             style: TextStyle(fontSize: 15, color: Colors.white),
                           )
                         ],
@@ -94,8 +94,11 @@ class PlaceItemState extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(LineIcons.commenting_o,
-                              size: 18, color: Colors.white),
+                          Icon(
+                            LineIcons.commenting_o,
+                            size: 18,
+                            color: Colors.white,
+                          ),
                           SizedBox(
                             width: 5,
                           ),
@@ -130,7 +133,7 @@ class PlaceItemState extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      place.name,
+                      place.placeTranslation.name,
                       maxLines: 2,
                       style: TextStyle(
                         fontSize: 16,

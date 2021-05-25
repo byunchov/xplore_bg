@@ -51,6 +51,7 @@ dependencies:
   url_launcher: ^5.7.10
   sliding_up_panel: ^1.0.2
   share: ^0.6.5+4
+  skeleton_text: ^2.0.2
   material_floating_search_bar: ^0.2.6
   connectivity: ^2.0.2
   shared_preferences: ^0.5.12+4

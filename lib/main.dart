@@ -4,9 +4,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:xplore_bg/bloc/bookmark_bloc.dart';
 import 'package:xplore_bg/bloc/feautured_bloc.dart';
 import 'package:xplore_bg/bloc/internet_bloc.dart';
+import 'package:xplore_bg/bloc/popular_places_bloc.dart';
+import 'package:xplore_bg/bloc/recent_places_bloc.dart';
+import 'package:xplore_bg/bloc/review_bloc.dart';
 import 'package:xplore_bg/bloc/signin_bloc.dart';
+import 'package:xplore_bg/bloc/similar_places_bloc.dart';
 import 'package:xplore_bg/pages/splash_page.dart';
 import 'package:xplore_bg/utils/config.dart';
 
@@ -45,9 +50,15 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider<InternetBloc>(create: (ctx) => InternetBloc()),
         ChangeNotifierProvider<SigninBloc>(create: (ctx) => SigninBloc()),
-        ChangeNotifierProvider<FeaturedBloc>(
-          create: (ctx) => FeaturedBloc(),
-        ),
+        ChangeNotifierProvider<FeaturedBloc>(create: (ctx) => FeaturedBloc()),
+        ChangeNotifierProvider<BookmarkBloc>(create: (ctx) => BookmarkBloc()),
+        ChangeNotifierProvider<ReviewBloc>(create: (ctx) => ReviewBloc()),
+        ChangeNotifierProvider<PopularPlacesBloc>(
+            create: (ctx) => PopularPlacesBloc()),
+        ChangeNotifierProvider<RecentlyAddedPlacesBloc>(
+            create: (ctx) => RecentlyAddedPlacesBloc()),
+        ChangeNotifierProvider<SimilarPlacesBloc>(
+            create: (ctx) => SimilarPlacesBloc()),
       ],
       child: MaterialApp(
         // title: 'Flutter Demo',

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-void nextScreenMaterial(BuildContext context, Widget page) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+Future nextScreenMaterial(BuildContext context, Widget page) async {
+  return Navigator.push(context, MaterialPageRoute(builder: (context) => page));
 }
 
 void nextScreenReplaceMaterial(BuildContext context, Widget page) {
