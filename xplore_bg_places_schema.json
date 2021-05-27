@@ -1,0 +1,55 @@
+{
+    "places": [
+        {
+            "<place_id === timestamp>": {
+                "timestamp": "20210518101823",
+                "gallery": [
+                    "links to images"
+                ],
+                "coordinates": {
+                    "lat": 1.23,
+                    "lng": 5.32
+                },
+                "star_rating": 4.2,
+                "reviews_count": 23,
+                "loves_count": 150,
+                "bookmarks_count": 32,
+                "state": "state",
+                "category": "tourism",
+                "subcategory": "caves",
+                "locales": [
+                    {
+                        "bg": {
+                            "name": "Име на обекта",
+                            "residence": "Населено място",
+                            "state": "Област",
+                            "description": "Описание",
+                            "category": "Туризъм",
+                            "subcategory": "Пещери"
+                        },
+                        "en": {
+                            "name": "Име на обекта",
+                            "residence": "Населено място",
+                            "state": "Област",
+                            "description": "Описание",
+                            "category": "Туризъм",
+                            "subcategory": "Пещери"
+                        }
+                    }
+                ],
+                "reviews": [
+                    {
+                        "<uid>@<timestamp>": {
+                            "comment": "",
+                            "rating": 3.4,
+                            "uid": "<uid>",
+                            "timestamp": "20210518101823",
+                            "user_image": "<link>",
+                            "flagged": true
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

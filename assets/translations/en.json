@@ -28,5 +28,11 @@
   "feedback": "Contact Us",
   "select_lang": "Language",
   "about_us": "About us",
-  "about_app": "About app"
+  "about_app": "About app",
+  "show_more": "Show more",
+  "show_less": "Show less",
+  "nearby_rest": "Nearby Restaurants",
+  "nearby_hotels": "Nearby Hotels",
+  "reviews": "Reviews",
+  "opening_hours": "Opening Hours"
 }

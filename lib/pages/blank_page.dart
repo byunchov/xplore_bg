@@ -7,14 +7,16 @@ class BlankPage extends StatelessWidget {
   final IconData icon;
   final String shortText;
   final bool divider;
+  final Widget customAction;
 
-  const BlankPage(
-      {Key key,
-      @required this.heading,
-      this.icon,
-      this.shortText,
-      this.divider = false})
-      : super(key: key);
+  const BlankPage({
+    Key key,
+    @required this.heading,
+    this.icon,
+    this.shortText,
+    this.divider = false,
+    this.customAction,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +27,18 @@ class BlankPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
-              icon ?? Feather.image,
-              size: 96,
-              color: Colors.grey[500],
-            ),
-            SizedBox(height: 15),
+            this.icon == null
+                ? Container()
+                : Column(
+                    children: [
+                      Icon(
+                        icon ?? Feather.image,
+                        size: 96,
+                        color: Colors.grey[500],
+                      ),
+                      SizedBox(height: 15),
+                    ],
+                  ),
             Text(
               heading ?? 'Heading',
               style: TextStyle(
@@ -59,6 +67,7 @@ class BlankPage extends StatelessWidget {
               ),
               overflow: TextOverflow.ellipsis,
             ),
+            this.customAction == null ? Container() : this.customAction,
           ],
         ),
       ),

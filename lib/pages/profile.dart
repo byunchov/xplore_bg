@@ -1,90 +1,73 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:xplore_bg/bloc/signin_bloc.dart';
+import 'package:xplore_bg/pages/sign_in.dart';
+import 'package:xplore_bg/utils/config.dart';
 import 'package:xplore_bg/utils/language_select.dart';
+import 'package:xplore_bg/utils/page_navigation.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  final String tag;
+
+  const ProfilePage({Key key, this.tag}) : super(key: key);
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+  double _tileIconSize = 30;
+
   @override
   Widget build(BuildContext context) {
-    double _tileIconSize = 30;
+    super.build(context);
+    final SigninBloc _signinBloc = context.watch<SigninBloc>();
 
     return Scaffold(
       appBar: AppBar(
         title: Text('menu_user_profile').tr(),
+        automaticallyImplyLeading: (widget.tag != null),
         actions: [
-          IconButton(
-            icon: Icon(Feather.log_out),
-            onPressed: () {},
-          ),
+          _signinBloc.isSignedIn
+              ? IconButton(
+                  icon: Icon(Feather.log_out),
+                  onPressed: () {},
+                )
+              : IconButton(
+                  icon: Icon(Feather.log_in),
+                  onPressed: () {},
+                ),
         ],
       ),
       body: ListView(
         children: [
-          UserProfileUI(),
+          _signinBloc.isSignedIn
+              ? UserProfileUI()
+              : Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+                  child: _listTile(
+                    context,
+                    icon: Feather.log_in,
+                    text: "Login",
+                    color: Colors.orangeAccent,
+                    onPress: () {
+                      nextScreenPopup(context, LoginScreen(tag: "login"));
+                    },
+                  ),
+                ),
           SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ListTile(
-                //   title: Text("byunchov@gmail.com"),
-                //   leading: Container(
-                //     height: _tileIconSize,
-                //     width: _tileIconSize,
-                //     decoration: BoxDecoration(
-                //       color: Colors.blueAccent,
-                //       borderRadius: BorderRadius.circular(_tileIconSize * 0.2),
-                //     ),
-                //     child: Icon(
-                //       LineIcons.at,
-                //       size: _tileIconSize * 0.65,
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                //   trailing:
-                //       Icon(Feather.chevron_right, size: _tileIconSize * 0.65),
-                // ),
-                // Divider(height: 5),
-                // ListTile(
-                //   title: Text("edit_profile").tr(),
-                //   leading: Container(
-                //     height: _tileIconSize,
-                //     width: _tileIconSize,
-                //     decoration: BoxDecoration(
-                //       color: Colors.orangeAccent,
-                //       borderRadius: BorderRadius.circular(_tileIconSize * 0.2),
-                //     ),
-                //     child: Icon(
-                //       Feather.edit,
-                //       size: _tileIconSize * 0.65,
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                //   trailing:
-                //       Icon(Feather.chevron_right, size: _tileIconSize * 0.65),
-                // ),
-                // Divider(height: 5),
-                // ListTile(
-                //   title: Text("logout").tr(),
-                //   leading: Container(
-                //     height: _tileIconSize,
-                //     width: _tileIconSize,
-                //     decoration: BoxDecoration(
-                //       color: Colors.redAccent,
-                //       borderRadius: BorderRadius.circular(_tileIconSize * 0.2),
-                //     ),
-                //     child: Icon(
-                //       Feather.log_out,
-                //       size: _tileIconSize * 0.65,
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                //   trailing:
-                //       Icon(Feather.chevron_right, size: _tileIconSize * 0.65),
-                // ),
-                // SizedBox(height: 20),
                 Text(
                   "general_settings",
                   style: TextStyle(
@@ -162,6 +145,30 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _listTile(
+    BuildContext context, {
+    double iconSize = 30,
+    @required IconData icon,
+    Function onPress,
+    @required String text,
+    Color color,
+  }) {
+    return ListTile(
+      title: Text(text),
+      leading: Container(
+        height: iconSize,
+        width: iconSize,
+        decoration: BoxDecoration(
+          color: color ?? Colors.purpleAccent,
+          borderRadius: BorderRadius.circular(iconSize * 0.2),
+        ),
+        child: Icon(icon, size: iconSize * 0.65, color: Colors.white),
+      ),
+      trailing: Icon(Feather.chevron_right, size: iconSize * 0.65),
+      onTap: onPress,
+    );
+  }
 }
 
 class UserProfileUI extends StatelessWidget {
@@ -176,6 +183,8 @@ class UserProfileUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SigninBloc _signinBloc = context.watch<SigninBloc>();
+
     double decorationThickness = 10;
     double rDecoration = this.avatarRadius + decorationThickness;
     double paddingLRT = 20;
@@ -244,8 +253,8 @@ class UserProfileUI extends StatelessWidget {
               child: CircleAvatar(
                 radius: this.avatarRadius, //65
                 backgroundColor: Colors.grey[400],
-                backgroundImage:
-                    AssetImage("assets/images/categories/mountain.jpg"),
+                backgroundImage: CachedNetworkImageProvider(
+                    _signinBloc.imageUrl ?? AppConfig().defaultProfilePic),
               ),
             ),
           ),
@@ -269,7 +278,7 @@ class UserProfileUI extends StatelessWidget {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        "800",
+                        _signinBloc.lovedCount.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20,
@@ -291,7 +300,7 @@ class UserProfileUI extends StatelessWidget {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        "235",
+                        _signinBloc.bookmarksCount.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20,
@@ -314,7 +323,7 @@ class UserProfileUI extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    "Bozhidar Yunchov",
+                    _signinBloc.name.toString(),
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     style: TextStyle(
@@ -325,7 +334,7 @@ class UserProfileUI extends StatelessWidget {
                   ),
                   SizedBox(height: 5),
                   Text(
-                    "byunchov@email.com",
+                    _signinBloc.email.toString(),
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     style: TextStyle(
@@ -374,7 +383,9 @@ class UserProfileUI extends StatelessWidget {
                             borderRadius: BorderRadius.circular(35),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          openLogoutDialog(context);
+                        },
                       ),
                       Spacer(),
                     ],
@@ -382,52 +393,34 @@ class UserProfileUI extends StatelessWidget {
                 ],
               ),
             ),
-          )
-          // Positioned(
-          //   right: 25,
-          //   left: MediaQuery.of(context).size.width -
-          //       (MediaQuery.of(context).size.width / 2 - 65 - 20),
-          //   top: 110,
-          //   child: Column(
-          //     children: [
-          //       Icon(
-          //         Icons.bookmark,
-          //         size: 30,
-          //         color: Colors.cyan[700],
-          //       ),
-          //       SizedBox(height: 5),
-          //       Text(
-          //         "235",
-          //         textAlign: TextAlign.center,
-          //         style: TextStyle(
-          //           fontSize: 20,
-          //           fontWeight: FontWeight.w700,
-          //           color: Colors.grey[700],
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          // Positioned(
-          //   left: 0,
-          //   right: 0,
-          //   top: paddingTop + paddingLRT + rDecoration + 25,
-          //   child: Padding(
-          //     padding: EdgeInsets.only(bottom: 25),
-          //     child: Text(
-          //       "Bozhidar Yunchov",
-          //       textAlign: TextAlign.center,
-          //       maxLines: 2,
-          //       style: TextStyle(
-          //         fontSize: 26,
-          //         color: Colors.grey[800],
-          //         fontWeight: FontWeight.w700,
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          ),
         ],
       ),
+    );
+  }
+
+  void openLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout').tr(),
+          actions: [
+            FlatButton(
+              child: Text('no').tr(),
+              onPressed: () => Navigator.pop(context),
+            ),
+            FlatButton(
+              child: Text('yes').tr(),
+              onPressed: () async {
+                Navigator.pop(context);
+                await context.read<SigninBloc>().userSignout().then(
+                    (value) => nextScreenCloseOthers(context, LoginScreen()));
+              },
+            )
+          ],
+        );
+      },
     );
   }
 }

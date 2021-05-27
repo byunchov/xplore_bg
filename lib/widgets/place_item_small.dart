@@ -1,9 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg/models/place.dart';
 import 'package:xplore_bg/pages/place_details.dart';
+import 'package:xplore_bg/utils/custom_cached_network_image.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
+import 'package:xplore_bg/widgets/hero_widget.dart';
 
 class PlaceItemSmall extends StatelessWidget {
   final String tag;
@@ -14,7 +15,7 @@ class PlaceItemSmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String _tag = '$tag${place.name}';
+    String _tag = '$tag${place.timestamp}';
     double _cardRadius = 10;
 
     return InkWell(
@@ -23,7 +24,7 @@ class PlaceItemSmall extends StatelessWidget {
         // margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         margin: EdgeInsets.all(7),
         // EdgeInsets.only(left: 7, right: 7, top: 7, bottom: 7), //left: 12,
-        width: MediaQuery.of(context).size.width * 0.36,
+        width: MediaQuery.of(context).size.width * 0.42,
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(_cardRadius),
@@ -37,25 +38,33 @@ class PlaceItemSmall extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Hero(
+            HeroWidget(
               tag: _tag,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(_cardRadius),
-                  image: DecorationImage(
-                    image: CachedNetworkImageProvider(place.gallery[0]),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.transparent, Colors.black38],
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(_cardRadius),
+                      // image: DecorationImage(
+                      //   image: CachedNetworkImageProvider(place.gallery[0]),
+                      //   fit: BoxFit.cover,
+                      // ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(_cardRadius),
+                      child: CustomCachedImage(imageUrl: place.gallery[0]),
                     ),
                   ),
-                ),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.transparent, Colors.black38],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Align(
@@ -63,7 +72,7 @@ class PlaceItemSmall extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20, left: 10, right: 10),
                 child: Text(
-                  place.name,
+                  place.placeTranslation.name,
                   // "Bansko",
                   maxLines: 2,
                   style: TextStyle(

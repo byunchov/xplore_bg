@@ -1,9 +1,14 @@
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
+import 'package:xplore_bg/bloc/category_list_bloc.dart';
 import 'package:xplore_bg/models/category_tile.dart';
+import 'package:xplore_bg/pages/blank_page.dart';
 import 'package:xplore_bg/pages/categories/category_list.dart';
+import 'package:xplore_bg/utils/custom_cached_network_image.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
 
 class CategotiesTab extends StatefulWidget {
@@ -23,42 +28,62 @@ class _CategotiesTabState extends State<CategotiesTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    List<Category> categoryList = List.generate(
-      10,
-      (int index) => Category(
-        itemCount: rand(10, 1500),
-        name: "Category $index",
-      ),
-    );
+    // List<Category> categoryList = List.generate(
+    //   10,
+    //   (int index) => Category(
+    //     itemCount: rand(10, 1500),
+    //     name: "Category $index",
+    //   ),
+    // );
 
-    return StaggeredGridView.countBuilder(
-      padding: EdgeInsets.all(20),
-      crossAxisCount: 2,
-      itemCount: categoryList.length,
-      itemBuilder: (context, index) {
-        return CategoryCard(
-          categoryItem: categoryList[index],
-        );
-      },
-      staggeredTileBuilder: (int index) {
-        // return tileList[index];
-        if (index == (categoryList.length - 1)) {
-          if (index % 2 == 0 || (index % 3 == 0)) {
-            return StaggeredTile.count(1, 1);
-          } else {
-            return StaggeredTile.count(2, 1);
+    return Container(
+      child: FutureBuilder(
+        future: context.watch<CategoryListBloc>().getCategoryList(
+              context.locale.toString(),
+            ),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length == 0) {
+              return BlankPage(
+                heading: tr('no_favourites'),
+                shortText: tr('no_favourites_desc'),
+                icon: Icons.list_alt_rounded,
+              );
+            } else {
+              return StaggeredGridView.countBuilder(
+                padding: EdgeInsets.all(20),
+                crossAxisCount: 2,
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return CategoryCard(
+                    categoryItem: snapshot.data[index],
+                  );
+                },
+                staggeredTileBuilder: (int index) {
+                  // return tileList[index];
+                  if (index == (snapshot.data.length - 1)) {
+                    if (index % 2 == 0 || (index % 3 == 0)) {
+                      return StaggeredTile.count(1, 1);
+                    } else {
+                      return StaggeredTile.count(2, 1);
+                    }
+                  }
+                  if (index == 0) {
+                    return StaggeredTile.count(2, 1);
+                  } else if (index % 2 == 0 && !(index % 3 == 0)) {
+                    return StaggeredTile.count(1, 2);
+                  } else {
+                    return StaggeredTile.count(1, 1);
+                  }
+                },
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+              );
+            }
           }
-        }
-        if (index == 0) {
-          return StaggeredTile.count(2, 1);
-        } else if (index % 2 == 0 && !(index % 3 == 0)) {
-          return StaggeredTile.count(1, 2);
-        } else {
-          return StaggeredTile.count(1, 1);
-        }
-      },
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 }
@@ -171,13 +196,11 @@ class CategotiesTabOld extends StatelessWidget {
 */
 
 class CategoryCard extends StatelessWidget {
-  final Category categoryItem;
-  final dynamic image;
+  final CategoryItem categoryItem;
   final double cardRadius;
 
   const CategoryCard({
     Key key,
-    this.image,
     this.categoryItem,
     this.cardRadius = 10,
   }) : super(key: key);
@@ -190,11 +213,11 @@ class CategoryCard extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(cardRadius),
-              image: DecorationImage(
-                image: image ??
-                    AssetImage("assets/images/categories/mountain.jpg"),
-                fit: BoxFit.cover,
-              ),
+              // image: DecorationImage(
+              //   image: image ??
+              //       AssetImage("assets/images/categories/mountain.jpg"),
+              //   fit: BoxFit.cover,
+              // ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black12,
@@ -202,6 +225,10 @@ class CategoryCard extends StatelessWidget {
                   blurRadius: 8.0,
                 ),
               ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(cardRadius),
+              child: CustomCachedImage(imageUrl: categoryItem.thumbnail),
             ),
           ),
           Container(
@@ -211,13 +238,14 @@ class CategoryCard extends StatelessWidget {
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
                 colors: [
-                  Colors.black.withOpacity(0.65),
-                  Colors.black.withOpacity(0.5),
-                  Colors.black.withOpacity(0.2),
+                  Colors.black.withOpacity(0.55),
+                  Colors.black.withOpacity(0.3),
+                  Colors.black.withOpacity(0.1),
                 ],
               ),
             ),
           ),
+          //item count label
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
@@ -226,7 +254,7 @@ class CategoryCard extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Colors.grey[600].withOpacity(0.9),
+                  color: Colors.grey[700].withOpacity(0.95),
                 ),
                 child: Text(
                   categoryItem.itemCount.toString(),
@@ -239,6 +267,7 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
           ),
+          // category name
           Positioned(
             bottom: 0,
             left: 0,
