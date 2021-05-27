@@ -144,10 +144,9 @@ class FeaturedBloc with ChangeNotifier {
     return place;
   }
 
-  onRefresh() {
-    featuredList.clear();
+  void onRefresh() {
     _data.clear();
-    getData();
+    fetchData();
     notifyListeners();
   }
 

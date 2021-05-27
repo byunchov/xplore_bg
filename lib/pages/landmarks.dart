@@ -28,6 +28,7 @@ class _LandmarksPageState extends State<LandmarksPage>
     return Scaffold(
       appBar: AppBar(
         title: Text('menu_landmarks').tr(),
+        automaticallyImplyLeading: false,
       ),
       body: CategotiesTab(),
     );

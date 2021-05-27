@@ -11,6 +11,9 @@ import 'package:xplore_bg/utils/language_select.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
 
 class ProfilePage extends StatefulWidget {
+  final String tag;
+
+  const ProfilePage({Key key, this.tag}) : super(key: key);
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -25,16 +28,22 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final SigninBloc _signinBloc = context.read<SigninBloc>();
+    final SigninBloc _signinBloc = context.watch<SigninBloc>();
 
     return Scaffold(
       appBar: AppBar(
         title: Text('menu_user_profile').tr(),
+        automaticallyImplyLeading: (widget.tag != null),
         actions: [
-          IconButton(
-            icon: Icon(Feather.log_out),
-            onPressed: () {},
-          ),
+          _signinBloc.isSignedIn
+              ? IconButton(
+                  icon: Icon(Feather.log_out),
+                  onPressed: () {},
+                )
+              : IconButton(
+                  icon: Icon(Feather.log_in),
+                  onPressed: () {},
+                ),
         ],
       ),
       body: ListView(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:xplore_bg/bloc/bookmark_bloc.dart';
+import 'package:xplore_bg/bloc/category_list_bloc.dart';
 import 'package:xplore_bg/bloc/feautured_bloc.dart';
 import 'package:xplore_bg/bloc/internet_bloc.dart';
 import 'package:xplore_bg/bloc/popular_places_bloc.dart';
@@ -12,6 +13,7 @@ import 'package:xplore_bg/bloc/recent_places_bloc.dart';
 import 'package:xplore_bg/bloc/review_bloc.dart';
 import 'package:xplore_bg/bloc/signin_bloc.dart';
 import 'package:xplore_bg/bloc/similar_places_bloc.dart';
+import 'package:xplore_bg/bloc/subcategory_list_bloc.dart';
 import 'package:xplore_bg/pages/splash_page.dart';
 import 'package:xplore_bg/utils/config.dart';
 
@@ -29,6 +31,10 @@ void main() async {
     child: MyApp(),
   ));
 
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.white,
@@ -59,6 +65,10 @@ class _MyAppState extends State<MyApp> {
             create: (ctx) => RecentlyAddedPlacesBloc()),
         ChangeNotifierProvider<SimilarPlacesBloc>(
             create: (ctx) => SimilarPlacesBloc()),
+        ChangeNotifierProvider<CategoryListBloc>(
+            create: (ctx) => CategoryListBloc()),
+        ChangeNotifierProvider<SubcategoryListBloc>(
+            create: (ctx) => SubcategoryListBloc()),
       ],
       child: MaterialApp(
         // title: 'Flutter Demo',

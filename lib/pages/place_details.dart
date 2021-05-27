@@ -11,6 +11,7 @@ import 'package:xplore_bg/bloc/signin_bloc.dart';
 import 'package:xplore_bg/bloc/similar_places_bloc.dart';
 import 'package:xplore_bg/models/icon_data.dart';
 import 'package:xplore_bg/models/place.dart';
+import 'package:xplore_bg/pages/blank_page.dart';
 import 'package:xplore_bg/pages/restaurants.dart';
 import 'package:xplore_bg/pages/reviews/reviews.dart';
 import 'package:xplore_bg/utils/config.dart';
@@ -516,9 +517,14 @@ class _SimilarPlacesState extends State<SimilarPlaces> {
             shrinkWrap: true,
             itemCount: bloc.data.isEmpty ? 5 : bloc.data.length,
             itemBuilder: (BuildContext context, int index) {
-              if (bloc.data.isEmpty)
+              if (bloc.data.isEmpty) {
                 return SmallLoadingCard(
                     width: MediaQuery.of(context).size.width * 0.42);
+              } else if (bloc.data == null) {
+                return BlankPage(
+                  heading: "Nothing found",
+                );
+              }
               return PlaceItemSmall(
                 place: bloc.data[index],
                 tag: "similar${UniqueKey().toString()}${widget.placeId}",

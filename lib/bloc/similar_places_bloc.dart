@@ -14,7 +14,7 @@ class SimilarPlacesBloc extends ChangeNotifier {
     List<DocumentSnapshot> _snap = [];
     List<Place> places = [];
 
-    print("Simiral: $category, $id");
+    // print("Simiral: $category, $id");
 
     final rawData = await firestore
         .collection('locations')
@@ -23,9 +23,13 @@ class SimilarPlacesBloc extends ChangeNotifier {
         .limit(6)
         .get();
 
-    print(rawData.docs);
-    _snap.addAll(rawData.docs.skipWhile((value) => value['timestamp'] == id));
-    print(_snap);
+    _snap.addAll(rawData.docs);
+    int indexOf = _snap.indexWhere((item) => item['timestamp'] == id);
+    if (indexOf >= 0) {
+      _snap.removeAt(indexOf);
+    }
+
+    print("Found element with ID $id at postition $indexOf");
     for (var item in _snap) {
       var locRef = item.reference.collection('locales').doc(locale);
       var trData = await locRef.get();
@@ -34,7 +38,11 @@ class SimilarPlacesBloc extends ChangeNotifier {
       places.add(p);
       print("Cat tag: ${p.categoryTag}");
     }
-    _data.addAll(places);
+    if (places.isNotEmpty) {
+      _data.addAll(places);
+    } else {
+      _data = null;
+    }
     print(places);
     notifyListeners();
   }

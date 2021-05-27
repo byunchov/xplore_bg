@@ -18,6 +18,7 @@ import 'package:xplore_bg/utils/misc.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
 import 'package:xplore_bg/utils/popup_dialogs.dart';
 import 'package:xplore_bg/widgets/review_card.dart';
+import 'package:xplore_bg/widgets/ui_elements.dart';
 
 class ReviewsPage extends StatefulWidget {
   final Place place;
@@ -171,31 +172,22 @@ class _ReviewsPageState extends State<ReviewsPage> {
 
   Widget _notSignedIn(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(25),
+      padding: EdgeInsets.only(top: 30, bottom: 15),
       color: Colors.grey[100],
-      child: Column(
-        children: [
-          Text(
-            "Not logged in!\nLogin to gie review.",
-            style: Theme.of(context).textTheme.headline6,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 15),
-          ElevatedButton(
+      child: BlankPage(
+        heading: "Not logged in!",
+        shortText: "Login to give review.",
+        customAction: Column(
+          children: [
+            SizedBox(height: 10),
+            PrimaryButtonRg(
               child: Text("Log in".toUpperCase()),
-              style: ElevatedButton.styleFrom(
-                  elevation: 3,
-                  primary: Theme.of(context).primaryColor,
-                  onPrimary: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  textStyle:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               onPressed: () {
                 nextScreenMaterial(context, LoginScreen());
-              }),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -221,7 +213,11 @@ class _ReviewsPageState extends State<ReviewsPage> {
 
   Widget _reviewActions(BuildContext context) {
     return PopupMenuButton(
-      child: Center(child: Icon(Icons.more_vert_rounded)),
+      child: Center(
+          child: Icon(
+        Icons.more_vert_rounded,
+        color: Colors.grey,
+      )),
       itemBuilder: (context) {
         return [
           PopupMenuItem(
@@ -366,7 +362,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
       data = await firestore
           .collection(collection)
           .orderBy('timestamp', descending: true)
-          .startAfter([_lastVisible['timestamp']])
+          .startAfterDocument(_lastVisible)
           .limit(7)
           .get();
     }

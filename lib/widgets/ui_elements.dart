@@ -99,3 +99,65 @@ class RoundedIconButton extends StatelessWidget {
     return Container();
   }
 }
+
+class PrimaryButtonRg extends StatelessWidget {
+  final Function onPressed;
+  final Widget child;
+  final double elevation;
+
+  const PrimaryButtonRg({
+    Key key,
+    this.onPressed,
+    this.child,
+    this.elevation = 3,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Color _primary = Theme.of(context).primaryColor;
+    return ElevatedButton(
+      child: child,
+      style: ElevatedButton.styleFrom(
+          elevation: elevation,
+          primary: _primary,
+          onPrimary: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      onPressed: onPressed,
+    );
+  }
+}
+
+class PrimaryOutlinedButtonRg extends StatelessWidget {
+  final Function onPressed;
+  final Widget child;
+  final double elevation;
+
+  const PrimaryOutlinedButtonRg({
+    Key key,
+    this.onPressed,
+    this.child,
+    this.elevation = 0,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Color _primary = Theme.of(context).primaryColor;
+    return OutlinedButton(
+      child: child,
+      style: OutlinedButton.styleFrom(
+          elevation: elevation,
+          primary: _primary,
+          onSurface: _primary,
+          // backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          side: BorderSide(color: _primary, width: 2),
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      onPressed: onPressed,
+    );
+  }
+}

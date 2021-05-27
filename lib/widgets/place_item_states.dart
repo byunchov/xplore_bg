@@ -23,7 +23,7 @@ class PlaceItemState extends StatelessWidget {
         // margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         margin: EdgeInsets.only(top: 10, bottom: 10),
         width: MediaQuery.of(context).size.width,
-        height: 200,
+        height: 220,
         decoration: BoxDecoration(
             color: Colors.grey[300], borderRadius: BorderRadius.circular(10)),
         child: Stack(
@@ -120,10 +120,10 @@ class PlaceItemState extends StatelessWidget {
               right: 0,
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                height: 80,
+                height: 90,
                 padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
-                  color: Colors.black54.withOpacity(0.65),
+                  color: Colors.black54.withOpacity(0.7),
                   borderRadius: BorderRadius.vertical(
                     bottom: Radius.circular(_cardRaduis),
                   ),
@@ -157,7 +157,7 @@ class PlaceItemState extends StatelessWidget {
                           child: Text(
                             place.region,
                             style: TextStyle(
-                              color: Colors.grey[500],
+                              color: Colors.grey[400],
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                             ),
@@ -175,7 +175,8 @@ class PlaceItemState extends StatelessWidget {
         ),
       ),
       onTap: () {
-        nextScreenMaterial(context, PlaceDetailsPage(tag: _tag, place: place));
+        // nextScreenMaterial(context, PlaceDetailsPage(tag: _tag, place: place));
+        nextScreenHero(context, PlaceDetailsPage(tag: _tag, place: place));
       },
     );
   }

@@ -18,7 +18,7 @@ class ShowMorePage extends StatefulWidget {
 class _ShowMorePageState extends State<ShowMorePage> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final String collectionName = 'locations';
-  List<DocumentSnapshot> _snap = new List<DocumentSnapshot>();
+  List<DocumentSnapshot> _snap = [];
   List<Place> _data = [];
   ScrollController _controller;
   DocumentSnapshot _lastVisible;
@@ -140,7 +140,8 @@ class _ShowMorePageState extends State<ShowMorePage> {
       data = await firestore
           .collection(collectionName)
           .orderBy(_orderBy, descending: _descending)
-          .startAfter([_lastVisible[_orderBy]])
+          // .startAfter([_lastVisible[_orderBy]])
+          .startAfterDocument(_lastVisible)
           .limit(5)
           .get();
     }
@@ -158,11 +159,14 @@ class _ShowMorePageState extends State<ShowMorePage> {
         }
         setState(() {
           _isLoading = false;
-          _data.addAll(places);
+          _data = places;
         });
       }
     } else {
-      setState(() => _isLoading = false);
+      // setState(() => _isLoading = false);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 }

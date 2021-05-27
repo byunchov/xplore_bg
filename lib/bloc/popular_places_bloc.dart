@@ -31,5 +31,9 @@ class PopularPlacesBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onRefresh() {}
+  void onRefresh(String locale) {
+    _data.clear();
+    fetchData(locale);
+    notifyListeners();
+  }
 }

@@ -7,6 +7,9 @@ import 'package:xplore_bg/bloc/bookmark_bloc.dart';
 import 'package:xplore_bg/bloc/signin_bloc.dart';
 import 'package:xplore_bg/pages/blank_page.dart';
 import 'package:xplore_bg/pages/categories/category_list.dart';
+import 'package:xplore_bg/pages/sign_in.dart';
+import 'package:xplore_bg/utils/page_navigation.dart';
+import 'package:xplore_bg/widgets/ui_elements.dart';
 
 class BookmarksPage extends StatefulWidget {
   @override
@@ -29,6 +32,7 @@ class _BookmarksPageState extends State<BookmarksPage>
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
           title: Text('menu_bookmarks').tr(),
+          automaticallyImplyLeading: false,
           bottom: TabBar(
             // indicatorColor: Theme.of(context).primaryColor,
             indicator: MaterialIndicator(
@@ -66,6 +70,18 @@ class _BookmarksPageState extends State<BookmarksPage>
       shortText: "Signin to add bookmarks to your list.",
       icon: Feather.log_in,
       divider: false,
+      customAction: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(height: 15),
+          PrimaryButtonRg(
+            child: Text("Log in".toUpperCase()),
+            onPressed: () {
+              nextScreenMaterial(context, LoginScreen(tag: 'bookmarks'));
+            },
+          ),
+        ],
+      ),
     );
   }
 }

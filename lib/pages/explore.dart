@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +12,6 @@ import 'package:xplore_bg/pages/show_more.page.dart';
 import 'package:xplore_bg/utils/custom_cached_network_image.dart';
 import 'package:xplore_bg/utils/loading_cards.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
-import 'package:xplore_bg/utils/place_list.dart';
 import 'package:xplore_bg/widgets/featured_widget.dart';
 import 'package:xplore_bg/widgets/header.dart';
 import 'package:xplore_bg/widgets/hero_widget.dart';
@@ -35,10 +33,11 @@ class _ExplorePageState extends State<ExplorePage>
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 100)).then((_) {
-      context.read<FeaturedBloc>().fetchData();
-      context.read<PopularPlacesBloc>().fetchData(_locale);
-      context.read<RecentlyAddedPlacesBloc>().fetchData(_locale);
+    Future.delayed(Duration(milliseconds: 20)).then((_) {
+      _loadData();
+      // context.read<FeaturedBloc>().fetchData();
+      // context.read<PopularPlacesBloc>().fetchData(_locale);
+      // context.read<RecentlyAddedPlacesBloc>().fetchData(_locale);
     });
   }
 
@@ -53,41 +52,50 @@ class _ExplorePageState extends State<ExplorePage>
       //   backgroundColor: Theme.of(context).primaryColor,
       // ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Header(),
-              FeaturedPlaces(),
-              SizedBox(height: 5),
-              FlatButton(
-                onPressed: () {
-                  context.read<FeaturedBloc>().fetchData();
-                },
-                child: Text("Refresh data!"),
-              ),
-              SizedBox(height: 5),
-              PopularPlaces(
-                cardHeight: 250,
-                sectionHeader: tr('most_popular'),
-                onHeaderClick: () {
-                  nextScreenMaterial(
-                      context,
-                      ShowMorePage(
-                        page: "popular",
-                        title: tr('most_popular'),
-                      ));
-                },
-              ),
-              RecentlyAddedPlaces(
-                cardHeight: 220,
-                sectionHeader: tr('recently_added'),
-                onHeaderClick: () {},
-              ),
-            ],
+        child: RefreshIndicator(
+          onRefresh: () async => _refreshData(),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Header(),
+                FeaturedPlaces(),
+                SizedBox(height: 5),
+                PopularPlaces(
+                  cardHeight: 250,
+                  sectionHeader: tr('most_popular'),
+                  onHeaderClick: () {
+                    nextScreenMaterial(
+                        context,
+                        ShowMorePage(
+                          page: "popular",
+                          title: tr('most_popular'),
+                        ));
+                  },
+                ),
+                RecentlyAddedPlaces(
+                  cardHeight: 220,
+                  sectionHeader: tr('recently_added'),
+                  onHeaderClick: () {},
+                ),
+                SizedBox(height: 15),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  void _loadData() {
+    context.read<FeaturedBloc>().fetchData();
+    context.read<PopularPlacesBloc>().fetchData(_locale);
+    context.read<RecentlyAddedPlacesBloc>().fetchData(_locale);
+  }
+
+  void _refreshData() {
+    context.read<FeaturedBloc>().onRefresh();
+    context.read<PopularPlacesBloc>().onRefresh(_locale);
+    context.read<RecentlyAddedPlacesBloc>().onRefresh(_locale);
   }
 }
 
@@ -228,7 +236,7 @@ class RecentlyAddedPlaces extends StatelessWidget {
                     return SmallLoadingCard(
                         width: MediaQuery.of(context).size.width * 0.42);
                   return PlaceItemSmall(
-                    tag: "popular",
+                    tag: "recent",
                     place: bloc.data[index],
                   );
                 },
