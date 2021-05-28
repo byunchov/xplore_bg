@@ -105,7 +105,8 @@ class ReviewBloc extends ChangeNotifier {
 
         double rating = ratingTotal / revCount;
         int revs = snapshot['reviews_count'] as int ?? 0;
-        transaction.update(locRef, {'reviews_count': ++revs, 'rating': rating});
+        transaction.update(locRef,
+            {'reviews_count': ++revs, 'rating': rating.roundToDouble()});
         print('$_timestamp Review saved!');
         _addedReview = true;
       });
@@ -140,7 +141,8 @@ class ReviewBloc extends ChangeNotifier {
 
         double rating = ratingTotal / revCount;
         int revs = snapshot['reviews_count'] as int ?? 0;
-        transaction.update(locRef, {'reviews_count': --revs, 'rating': rating});
+        transaction.update(locRef,
+            {'reviews_count': --revs, 'rating': rating.roundToDouble()});
       });
     });
   }

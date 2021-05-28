@@ -1,28 +1,26 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:xplore_bg/bloc/bookmark_bloc.dart';
 import 'package:xplore_bg/bloc/signin_bloc.dart';
-import 'package:xplore_bg/bloc/similar_places_bloc.dart';
 import 'package:xplore_bg/models/icon_data.dart';
 import 'package:xplore_bg/models/place.dart';
-import 'package:xplore_bg/pages/blank_page.dart';
-import 'package:xplore_bg/pages/restaurants.dart';
+import 'package:xplore_bg/pages/hotels/hotels.dart';
+import 'package:xplore_bg/pages/restaurants/restaurants.dart';
 import 'package:xplore_bg/pages/reviews/reviews.dart';
 import 'package:xplore_bg/utils/config.dart';
 import 'package:xplore_bg/utils/custom_cached_network_image.dart';
-import 'package:xplore_bg/utils/loading_cards.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
-import 'package:xplore_bg/utils/place_list.dart';
 import 'package:xplore_bg/utils/popup_dialogs.dart';
 import 'package:xplore_bg/widgets/cards.dart';
 import 'package:xplore_bg/widgets/hero_widget.dart';
-import 'package:xplore_bg/widgets/place_item_small.dart';
+import 'package:xplore_bg/widgets/place_details/action_icon.dart';
+import 'package:xplore_bg/widgets/place_details/carousel.dart';
+import 'package:xplore_bg/widgets/similar_places.dart';
 import 'package:xplore_bg/widgets/ui_elements.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:expand_widget/expand_widget.dart';
@@ -43,6 +41,7 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
 
   String _locale;
   String _maptTile;
+  String _mapsRedirectUrl;
 
   @override
   bool get wantKeepAlive => true;
@@ -51,6 +50,8 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
   void initState() {
     // TODO: implement initState
     super.initState();
+    _mapsRedirectUrl =
+        "https://www.google.com/maps/@${widget.place.latitude},${widget.place.longitude},13z";
   }
 
   @override
@@ -66,7 +67,7 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
     _maptTile =
         "https://maps.googleapis.com/maps/api/staticmap?center=${widget.place.latitude},${widget.place.longitude}"
         "&zoom=14&size=600x200&scale=2&markers=color:red|${widget.place.latitude},${widget.place.longitude}"
-        "&language=$_locale&key=${AppConfig().mapsAPIKey}";
+        "&language=$_locale&key=${AppConfig.mapsAPIKey}";
 
     return Material(
       child: Stack(
@@ -401,7 +402,14 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
                 child: PlaceActivitiesColorCard(
                   text: tr('nearby_hotels'),
                   icon: Icons.hotel_rounded,
-                  // color: Color(0xff8f9ce2),
+                  callback: () {
+                    nextScreenMaterial(
+                        context,
+                        HotelsPage(
+                          place: widget.place,
+                          locale: _locale,
+                        ));
+                  },
                 ),
               ),
             ],
@@ -414,9 +422,9 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
               imageUrl: _maptTile,
               fit: BoxFit.cover,
             ),
-            callback: () {
-              print("Location clicked");
-            },
+            callback: () async => await canLaunch(_mapsRedirectUrl)
+                ? await launch(_mapsRedirectUrl)
+                : throw 'Could not launch $_mapsRedirectUrl',
           ),
         ],
       ),
@@ -460,243 +468,5 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
     } else {
       context.read<BookmarkBloc>().onBookmarkIconClick(widget.place.timestamp);
     }
-  }
-}
-
-class SimilarPlaces extends StatefulWidget {
-  final String category;
-  final String placeId;
-  const SimilarPlaces({
-    Key key,
-    @required this.category,
-    @required this.placeId,
-  }) : super(key: key);
-
-  @override
-  _SimilarPlacesState createState() => _SimilarPlacesState();
-}
-
-class _SimilarPlacesState extends State<SimilarPlaces> {
-  String _locale;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration(milliseconds: 100)).then((_) {
-      context
-          .read<SimilarPlacesBloc>()
-          .fetchData(widget.placeId, widget.category, _locale);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _locale = context.locale.toString();
-    final bloc = context.watch<SimilarPlacesBloc>();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Може да харесате",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        CustomDivider(
-          width: 120,
-          height: 3,
-          margin: EdgeInsets.symmetric(vertical: 10),
-        ),
-        Container(
-          height: 230,
-          width: MediaQuery.of(context).size.width,
-          child: ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            itemCount: bloc.data.isEmpty ? 5 : bloc.data.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (bloc.data.isEmpty) {
-                return SmallLoadingCard(
-                    width: MediaQuery.of(context).size.width * 0.42);
-              } else if (bloc.data == null) {
-                return BlankPage(
-                  heading: "Nothing found",
-                );
-              }
-              return PlaceItemSmall(
-                place: bloc.data[index],
-                tag: "similar${UniqueKey().toString()}${widget.placeId}",
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(width: 2);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ImageCarousel extends StatelessWidget {
-  final double heigth;
-  final List<dynamic> imgList;
-  final bool autoPlay;
-  final String tag;
-
-  const ImageCarousel({
-    Key key,
-    @required this.imgList,
-    this.heigth = 320,
-    this.autoPlay = false,
-    this.tag,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: this.heigth,
-      child: Swiper(
-        itemBuilder: (BuildContext context, int index) {
-          return CustomCachedImage(
-            imageUrl: imgList[index],
-            fit: BoxFit.fill,
-          );
-          // return Image.network(
-          //   imgList[index],
-          //   fit: BoxFit.fill,
-          // );
-        },
-        autoplay: this.autoPlay,
-        itemCount: imgList.length,
-        pagination: SwiperPagination(
-          alignment: Alignment.bottomLeft,
-          builder: SwiperCustomPagination(builder: (context, config) {
-            return ConstrainedBox(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Colors.black.withOpacity(0.55),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.camera_alt,
-                          color: Colors.white,
-                          size: 15,
-                        ),
-                        SizedBox(width: 6),
-                        Text(
-                          "Unsplash ${config.activeIndex}",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.black.withOpacity(0.8),
-                        ),
-                        child: FractionPaginationBuilder(
-                                color: Colors.white70,
-                                activeColor: Colors.white,
-                                fontSize: 17.0,
-                                activeFontSize: 22.0)
-                            .build(context, config),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              constraints: BoxConstraints.expand(height: 50.0),
-            );
-          }),
-        ),
-        // control: SwiperControl(
-        //   color: Colors.white,
-        //   padding: EdgeInsets.all(20),
-        // ),
-      ),
-    );
-  }
-}
-
-class ActionIcon extends StatelessWidget {
-  final String field;
-  // final String uid;
-  final String timestamp;
-  final dynamic iconStyle;
-
-  const ActionIcon({
-    Key key,
-    @required this.field,
-    // @required this.uid,
-    @required this.timestamp,
-    @required this.iconStyle,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final firestore = FirebaseFirestore.instance;
-    final sb = context.watch<SigninBloc>();
-
-    if (sb.isSignedIn == false) return this.iconStyle.normal;
-    return StreamBuilder(
-      stream: firestore.collection('users').doc(sb.uid).snapshots(),
-      builder: (context, snap) {
-        if (sb.uid == null) return this.iconStyle.normal;
-        if (!snap.hasData) return this.iconStyle.normal;
-        List data = snap.data[field];
-
-        if (data.contains(timestamp)) {
-          return this.iconStyle.bold;
-        } else {
-          return this.iconStyle.normal;
-        }
-      },
-    );
-  }
-}
-
-class ActionIconText extends StatelessWidget {
-  final String field;
-  final String timestamp;
-
-  const ActionIconText({
-    Key key,
-    @required this.field,
-    @required this.timestamp,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final firestore = FirebaseFirestore.instance;
-    final sb = context.watch<SigninBloc>();
-
-    return StreamBuilder(
-      stream: firestore.collection('locations').doc(this.timestamp).snapshots(),
-      builder: (context, snap) {
-        if (!snap.hasData) return Text('na');
-        int data = snap.data[this.field] as int;
-        return Text(data.toString());
-      },
-    );
   }
 }

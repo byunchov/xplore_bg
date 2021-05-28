@@ -4,13 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:xplore_bg/bloc/subcategory_list_bloc.dart';
 import 'package:xplore_bg/models/category_tile.dart';
 import 'package:xplore_bg/models/helpers.dart';
+import 'package:xplore_bg/pages/blank_page.dart';
 import 'package:xplore_bg/widgets/ui_elements.dart';
-
-import '../blank_page.dart';
 
 class FilteringPage extends StatefulWidget {
   final CategoryItem category;
-  Map filters;
+  final Map filters;
 
   FilteringPage({Key key, this.category, this.filters}) : super(key: key);
   @override
@@ -45,7 +44,6 @@ class _FilteringPageState extends State<FilteringPage> {
   @override
   Widget build(BuildContext context) {
     _selectedColor = Theme.of(context).primaryColor;
-    double _screenWidth = MediaQuery.of(context).size.width;
     _locale = context.locale.toString();
 
     return Scaffold(
@@ -59,7 +57,7 @@ class _FilteringPageState extends State<FilteringPage> {
             child: ListView(
               children: [
                 ExpansionTile(
-                  title: Text("Подкатегория"),
+                  title: Text("subcategories").tr(),
                   initiallyExpanded: true,
                   leading: Icon(Icons.access_time),
                   children: _isLoading
@@ -68,7 +66,7 @@ class _FilteringPageState extends State<FilteringPage> {
                 ),
                 Divider(height: 1, indent: 0, endIndent: 0),
                 ExpansionTile(
-                  title: Text("Критерий"),
+                  title: Text("criteria").tr(),
                   initiallyExpanded: true,
                   leading: Icon(Icons.access_time),
                   children: criteria != null
@@ -77,7 +75,7 @@ class _FilteringPageState extends State<FilteringPage> {
                 ),
                 Divider(height: 1, indent: 0, endIndent: 0),
                 ExpansionTile(
-                  title: Text("Подредба"),
+                  title: Text("order_by_alt").tr(),
                   initiallyExpanded: true,
                   leading: Icon(Icons.access_time),
                   children: orderDirection != null
@@ -103,7 +101,7 @@ class _FilteringPageState extends State<FilteringPage> {
               children: [
                 Expanded(
                   child: PrimaryOutlinedButtonRg(
-                    child: Text("Clear".toUpperCase()),
+                    child: Text(tr('clear_btn').toUpperCase()),
                     onPressed: () {
                       setState(() {
                         this.selectedCriteria = criteria.first;
@@ -119,7 +117,7 @@ class _FilteringPageState extends State<FilteringPage> {
                 SizedBox(width: 15),
                 Expanded(
                   child: PrimaryButtonRg(
-                    child: Text("Aplly".toUpperCase()),
+                    child: Text(tr('filter_btn').toUpperCase()),
                     elevation: 0,
                     onPressed: () {
                       Map filterCriteria = Map();
@@ -149,8 +147,8 @@ class _FilteringPageState extends State<FilteringPage> {
             Padding(
               padding: EdgeInsets.all(15),
               child: BlankPage(
-                heading: tr('no_favourites'),
-                shortText: tr('no_favourites_desc'),
+                heading: tr('no_places_found'),
+                shortText: tr('no_places_found_desc'),
                 icon: Icons.list_alt_rounded,
               ),
             ),
@@ -238,14 +236,15 @@ class _FilteringPageState extends State<FilteringPage> {
   void _fillFilters() {
     setState(() {
       criteria = <FilterCtiteria>[
-        FilterCtiteria(name: "Харесвания", tag: "loves_count"),
-        FilterCtiteria(name: "Рейтинг", tag: "rating"),
+        FilterCtiteria(name: tr('tag_loves'), tag: "loves_count"),
+        FilterCtiteria(name: tr('tag_rating'), tag: "rating"),
       ];
 
       orderDirection = <OrderDirection>[
-        OrderDirection(name: "Ascending", tag: "asc"),
-        OrderDirection(name: "Descending", tag: "desc"),
+        OrderDirection(name: tr('tag_order_asc'), tag: "asc"),
+        OrderDirection(name: tr('tag_order_desc'), tag: "desc"),
       ];
+      print("Filter page got ${widget.filters}");
 
       if (widget.filters != null) {
         String od = (widget.filters['order_by'] as bool) ? 'desc' : 'asc';
@@ -265,21 +264,24 @@ class _FilteringPageState extends State<FilteringPage> {
         .read<SubcategoryListBloc>()
         .getCategoryList(widget.category.tag, _locale);
     _isLoading = false;
-    setState(() {
-      _subcategories = data;
-      if (widget.filters != null) {
-        if (widget.filters['subcategories'] != null) {
-          var subs = List<String>.from(widget.filters['subcategories']);
-          if (subs.isNotEmpty) {
-            for (var sub in subs) {
-              int index = _subcategories.indexWhere((item) => item.tag == sub);
-              if (index >= 0) {
-                _subcategories[index].value = true;
-              }
+
+    if (widget.filters != null) {
+      if (widget.filters['subcategories'] != null) {
+        var subs = List<String>.from(widget.filters['subcategories']);
+        selectedSubcategories = subs;
+        if (subs.isNotEmpty) {
+          for (var sub in subs) {
+            int index = data.indexWhere((item) => item.tag == sub);
+            if (index >= 0) {
+              data[index].value = true;
             }
           }
         }
       }
+    }
+    // _subcategories = data;
+    setState(() {
+      _subcategories = data;
     });
   }
 }

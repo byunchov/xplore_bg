@@ -8,31 +8,31 @@ import 'package:share/share.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:xplore_bg/models/gallery.dart';
-import 'package:xplore_bg/models/restaurant.dart';
+import 'package:xplore_bg/models/hotel.dart';
 import 'package:xplore_bg/models/review.dart';
 import 'package:xplore_bg/pages/blank_page.dart';
 import 'package:xplore_bg/utils/config.dart';
-import 'package:xplore_bg/utils/custom_cached_network_image.dart';
 import 'package:xplore_bg/utils/misc.dart';
 import 'package:http/http.dart' as http;
 import 'package:xplore_bg/widgets/carousel.dart';
+import 'package:xplore_bg/widgets/review_card.dart';
 
-class RestaurantDetailsPage extends StatefulWidget {
+class HotelDetailsPage extends StatefulWidget {
   final String tag;
   final String placeId;
   final String locale;
 
-  RestaurantDetailsPage({this.tag, @required this.placeId, this.locale});
+  HotelDetailsPage({this.tag, @required this.placeId, this.locale});
 
   @override
-  _RestaurantDetailsPageState createState() => _RestaurantDetailsPageState();
+  _HotelDetailsPageState createState() => _HotelDetailsPageState();
 }
 
-class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
+class _HotelDetailsPageState extends State<HotelDetailsPage> {
   double _panelHeightOpen = 0;
   double _panelHeightClosed = 95.0;
   Color _statusBarColor = Colors.transparent;
-  RestaurantDetails _restaurantDetails;
+  HotelDetails _hotelDetails;
   String _sharePlaceDetails;
   bool _fetchSuccess = true;
 
@@ -55,7 +55,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
     _panelHeightClosed = _screenHeight - 320;
 
     return Material(
-      child: _restaurantDetails == null
+      child: _hotelDetails == null
           ? _loadingPlaceholder()
           : Stack(
               alignment: Alignment.topCenter,
@@ -67,9 +67,6 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
                   parallaxOffset: 0.5,
                   body: _body(),
                   panelBuilder: (sc) => _panel(sc),
-                  // borderRadius: BorderRadius.only(
-                  //     topLeft: Radius.circular(18.0),
-                  //     topRight: Radius.circular(18.0)),
                   onPanelSlide: (double pos) => setState(() {
                     if (pos == 1.0) {
                       _statusBarColor = Colors.white;
@@ -171,7 +168,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
       children: [
         ImageCarousel(
           tag: widget.tag,
-          imgList: _restaurantDetails.gallery,
+          imgList: _hotelDetails.gallery,
           autoPlay: false,
         ),
         Positioned(
@@ -199,7 +196,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
   }
 
   Widget _reviewSection() {
-    return _restaurantDetails.reviews.length == 0
+    return _hotelDetails.reviews.length == 0
         ? BlankPage(
             heading: tr('no_favourites'),
             icon: Feather.star,
@@ -207,9 +204,9 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
         : ListView.separated(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: _restaurantDetails.reviews.length,
+            itemCount: _hotelDetails.reviews.length,
             itemBuilder: (BuildContext context, int index) {
-              return _reviewItem(_restaurantDetails.reviews[index]);
+              return ReviewCard(review: _hotelDetails.reviews[index]);
             },
             separatorBuilder: (BuildContext context, int index) {
               return Divider();
@@ -217,82 +214,11 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
           );
   }
 
-  Widget _reviewItem(Review review) {
-    return Container(
-      padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 25,
-                child: CustomCachedImage(
-                  imageUrl: review.profilePicture,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SizedBox(width: 7),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    review.authorName,
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: Colors.grey[700],
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  SizedBox(height: 3),
-                  Text(
-                    review.relativeTimeDescription,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey[500],
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 7),
-          Row(
-            children: [
-              RatingBar.builder(
-                initialRating: review.rating.toDouble(),
-                minRating: 0,
-                direction: Axis.horizontal,
-                allowHalfRating: true,
-                itemCount: 5,
-                ignoreGestures: true,
-                itemPadding: EdgeInsets.zero,
-                itemSize: 18,
-                itemBuilder: (context, _) => Icon(
-                  Icons.star,
-                  color: Colors.amber,
-                ),
-                onRatingUpdate: (rating) {},
-              ),
-              SizedBox(width: 5),
-              Text(review.rating.toString()),
-            ],
-          ),
-          SizedBox(height: 7),
-          Text(review.text),
-        ],
-      ),
-    );
-  }
-
   Future<void> fetchData() async {
     String url = 'https://maps.googleapis.com/maps/api/place/details/json?' +
         'place_id=${widget.placeId}&fields=name,formatted_address,international_phone_number,' +
         'geometry/location,opening_hours/weekday_text,photos,price_level,rating,reviews,' +
-        'url,user_ratings_total,website&language=${widget.locale}&key=${AppConfig().mapsAPIKey}';
+        'url,user_ratings_total,website&language=${widget.locale}&key=${AppConfig.mapsAPIKey}';
 
     http.Response response = await http.get(url);
 
@@ -307,7 +233,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
           _fetchSuccess = false;
         });
       } else {
-        var details = RestaurantDetails(
+        var details = HotelDetails(
           name: result['name'] ?? "Name",
           address: result['formatted_address'] ?? "",
           phoneNumber: result['international_phone_number'] ?? "",
@@ -323,11 +249,13 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
         );
 
         var pl =
-            result['price_level'] == null ? 1 : result['price_level'].toInt();
-        if (pl == 0) {
-          details.priceLevel = 'Free';
+            result['price_level'] == null ? -1 : result['price_level'].toInt();
+        if (pl == -1) {
+          details.priceLevel = '(--)';
+        } else if (pl == 0) {
+          details.priceLevel = '(Free)';
         } else {
-          details.priceLevel = '\$' * pl;
+          details.priceLevel = "(${'\$' * pl})";
         }
 
         List<Gallery> gallery = [];
@@ -340,7 +268,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
                   removeHtmlTags(photo['html_attributions'][0])),
               imageUrl: 'https://maps.googleapis.com/maps/api/place/photo?' +
                   'maxwidth=1000&photoreference=${photo['photo_reference']}' +
-                  '&key=${AppConfig().mapsAPIKey}',
+                  '&key=${AppConfig.mapsAPIKey}',
             );
             gallery.add(gal);
           }
@@ -375,7 +303,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
         details.reviews = reviews;
 
         setState(() {
-          _restaurantDetails = details;
+          _hotelDetails = details;
           _sharePlaceDetails =
               "${details.name}\n${details.phoneNumber}\n${details.url}";
           _fetchSuccess = true;
@@ -407,7 +335,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  this._restaurantDetails.name,
+                  this._hotelDetails.name,
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
@@ -417,7 +345,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
                 Row(
                   children: [
                     RatingBar.builder(
-                      initialRating: _restaurantDetails.rating.toDouble(),
+                      initialRating: _hotelDetails.rating.toDouble(),
                       minRating: 0,
                       direction: Axis.horizontal,
                       allowHalfRating: true,
@@ -432,14 +360,14 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
                       onRatingUpdate: (rating) {},
                     ),
                     SizedBox(width: 5),
-                    Text(_restaurantDetails.rating.toString()),
+                    Text(_hotelDetails.rating.toString()),
                     SizedBox(width: 5),
-                    Text("(${_restaurantDetails.totalRatings})"),
+                    Text("(${_hotelDetails.totalRatings})"),
                   ],
                 ),
                 SizedBox(height: 5),
                 Text(
-                  "Ресторант · ${_restaurantDetails.priceLevel}",
+                  "Хотел · ${_hotelDetails.priceLevel}",
                   maxLines: 1,
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
@@ -467,18 +395,17 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
               "Навигиране",
               Icons.directions,
               Colors.blue,
-              () async => await canLaunch(_restaurantDetails.url)
-                  ? await launch(_restaurantDetails.url)
-                  : throw 'Could not launch ${_restaurantDetails.url}',
+              () async => await canLaunch(_hotelDetails.url)
+                  ? await launch(_hotelDetails.url)
+                  : throw 'Could not launch ${_hotelDetails.url}',
             ),
             _button(
               "Обади се",
               Icons.phone,
               Colors.green,
-              () async => await canLaunch(
-                      "tel:${_restaurantDetails.phoneNumber}")
-                  ? await launch("tel:${_restaurantDetails.phoneNumber}")
-                  : throw 'Could not launch tel:${_restaurantDetails.phoneNumber}',
+              () async => await canLaunch("tel:${_hotelDetails.phoneNumber}")
+                  ? await launch("tel:${_hotelDetails.phoneNumber}")
+                  : throw 'Could not launch tel:${_hotelDetails.phoneNumber}',
             ),
             _button(
               "Сподели",
@@ -487,7 +414,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
               () {
                 Share.share(
                   _sharePlaceDetails,
-                  subject: _restaurantDetails.name,
+                  subject: _hotelDetails.name,
                 );
               },
             ),
@@ -517,46 +444,45 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
     // add place address
     list.add(
       ListTile(
-        title: Text(_restaurantDetails.address),
+        title: Text(_hotelDetails.address),
         leading: Icon(Feather.map_pin),
-        onTap: () async => await canLaunch(_restaurantDetails.url)
-            ? await launch(_restaurantDetails.url)
-            : throw 'Could not launch ${_restaurantDetails.url}',
+        onTap: () async => await canLaunch(_hotelDetails.url)
+            ? await launch(_hotelDetails.url)
+            : throw 'Could not launch ${_hotelDetails.url}',
       ),
     );
 
     // add place phone number
-    if (_restaurantDetails.phoneNumber.isNotEmpty) {
+    if (_hotelDetails.phoneNumber.isNotEmpty) {
       list.add(
         ListTile(
-          title: Text(_restaurantDetails.phoneNumber),
+          title: Text(_hotelDetails.phoneNumber),
           leading: Icon(Icons.phone),
-          onTap: () async => await canLaunch(
-                  "tel:${_restaurantDetails.phoneNumber}")
-              ? await launch("tel:${_restaurantDetails.phoneNumber}")
-              : throw 'Could not launch tel:${_restaurantDetails.phoneNumber}',
+          onTap: () async => await canLaunch("tel:${_hotelDetails.phoneNumber}")
+              ? await launch("tel:${_hotelDetails.phoneNumber}")
+              : throw 'Could not launch tel:${_hotelDetails.phoneNumber}',
         ),
       );
     }
 
     // add place website
-    if (_restaurantDetails.website.isNotEmpty) {
+    if (_hotelDetails.website.isNotEmpty) {
       list.add(
         ListTile(
           title: Text(
-            _restaurantDetails.website,
+            _hotelDetails.website,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           leading: Icon(Icons.language_sharp),
-          onTap: () async => await canLaunch(_restaurantDetails.website)
-              ? await launch(_restaurantDetails.website)
-              : throw 'Could not launch ${_restaurantDetails.website}',
+          onTap: () async => await canLaunch(_hotelDetails.website)
+              ? await launch(_hotelDetails.website)
+              : throw 'Could not launch ${_hotelDetails.website}',
         ),
       );
     }
 
-    if (_restaurantDetails.openingHours.length != 0) {
+    if (_hotelDetails.openingHours.length != 0) {
       list.add(
         ExpansionTile(
           title: Text("opening_hours").tr(),
@@ -565,10 +491,10 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
             ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: _restaurantDetails.openingHours.length,
+              itemCount: _hotelDetails.openingHours.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  title: Text(_restaurantDetails.openingHours[index]),
+                  title: Text(_hotelDetails.openingHours[index]),
                 );
               },
             ),

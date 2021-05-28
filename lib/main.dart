@@ -8,9 +8,11 @@ import 'package:xplore_bg/bloc/bookmark_bloc.dart';
 import 'package:xplore_bg/bloc/category_list_bloc.dart';
 import 'package:xplore_bg/bloc/feautured_bloc.dart';
 import 'package:xplore_bg/bloc/internet_bloc.dart';
+import 'package:xplore_bg/bloc/maps_api_bloc.dart';
 import 'package:xplore_bg/bloc/popular_places_bloc.dart';
 import 'package:xplore_bg/bloc/recent_places_bloc.dart';
 import 'package:xplore_bg/bloc/review_bloc.dart';
+import 'package:xplore_bg/bloc/search_bloc.dart';
 import 'package:xplore_bg/bloc/signin_bloc.dart';
 import 'package:xplore_bg/bloc/similar_places_bloc.dart';
 import 'package:xplore_bg/bloc/subcategory_list_bloc.dart';
@@ -23,8 +25,7 @@ void main() async {
 
   runApp(EasyLocalization(
     path: "assets/translations",
-    supportedLocales:
-        AppConfig().appLocales.map((item) => Locale(item)).toList(),
+    supportedLocales: AppConfig.appLocales.map((item) => Locale(item)).toList(),
     fallbackLocale: Locale("bg"),
     startLocale: Locale("bg"),
     useOnlyLangCode: true,
@@ -56,9 +57,11 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider<InternetBloc>(create: (ctx) => InternetBloc()),
         ChangeNotifierProvider<SigninBloc>(create: (ctx) => SigninBloc()),
+        ChangeNotifierProvider<SearchBloc>(create: (ctx) => SearchBloc()),
         ChangeNotifierProvider<FeaturedBloc>(create: (ctx) => FeaturedBloc()),
         ChangeNotifierProvider<BookmarkBloc>(create: (ctx) => BookmarkBloc()),
         ChangeNotifierProvider<ReviewBloc>(create: (ctx) => ReviewBloc()),
+        ChangeNotifierProvider<MapsApiBloc>(create: (ctx) => MapsApiBloc()),
         ChangeNotifierProvider<PopularPlacesBloc>(
             create: (ctx) => PopularPlacesBloc()),
         ChangeNotifierProvider<RecentlyAddedPlacesBloc>(

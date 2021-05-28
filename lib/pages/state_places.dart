@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:xplore_bg/models/place.dart';
 import 'package:xplore_bg/models/state.dart';
 import 'package:xplore_bg/utils/place_list.dart';
 import 'package:xplore_bg/widgets/place_item_states.dart';
