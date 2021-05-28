@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:xplore_bg/models/hotel.dart';
 import 'package:xplore_bg/models/place.dart';
+import 'package:xplore_bg/pages/hotels/hotel_details.dart';
 import 'package:xplore_bg/pages/restaurants/restaurant_details.dart';
 import 'package:xplore_bg/utils/config.dart';
 import 'package:xplore_bg/utils/custom_cached_network_image.dart';
@@ -18,8 +19,7 @@ class HotelsPage extends StatefulWidget {
   final Place place;
   final String locale;
 
-  HotelsPage({Key key, @required this.place, this.locale})
-      : super(key: key);
+  HotelsPage({Key key, @required this.place, this.locale}) : super(key: key);
 
   @override
   _HotelsPageState createState() => _HotelsPageState();
@@ -168,7 +168,7 @@ class _HotelsPageState extends State<HotelsPage>
         var id = _alldata[index].id;
         nextScreenMaterial(
           context,
-          RestaurantDetailsPage(
+          HotelDetailsPage(
             placeId: id,
             tag: id,
             locale: widget.locale,
@@ -283,11 +283,7 @@ class _HotelsPageState extends State<HotelsPage>
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: Text("we didn't find any nearby restaurants in this area"),
-            title: Text(
-              'no restaurants found',
-              style: TextStyle(fontWeight: FontWeight.w700),
-            ),
+            content: Text('no_hotels').tr(),
             actions: <Widget>[
               FlatButton(
                   onPressed: () {
@@ -346,8 +342,7 @@ class _HotelsPageState extends State<HotelsPage>
   }
 
   void setMarkerIcon() async {
-    _customMarkerIcon =
-        await getBytesFromAsset(AppConfig.hotelPinIcon, 100);
+    _customMarkerIcon = await getBytesFromAsset(AppConfig.hotelPinIcon, 100);
   }
 
   void _addMarker() {

@@ -283,11 +283,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: Text("we didn't find any nearby restaurants in this area"),
-            title: Text(
-              'no restaurants found',
-              style: TextStyle(fontWeight: FontWeight.w700),
-            ),
+            content: Text('no_rest').tr(),
             actions: <Widget>[
               FlatButton(
                   onPressed: () {

@@ -140,12 +140,12 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
           ),
           SizedBox(height: 10),
           Text(
-            "Дейности",
+            "tag_actvities",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w800,
             ),
-          ),
+          ).tr(),
           CustomDivider(
             width: 80,
             height: 3,

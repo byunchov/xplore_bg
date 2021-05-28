@@ -72,5 +72,11 @@
   "no_places_found_desc": "No sites found for this category.",
   "subcategories": "Subcategories",
   "order_by_alt": "Order",
-  "criteria": "Criteria"
+  "criteria": "Criteria",
+  "tag_hotel": "Hotel",
+  "tag_restaurant": "Restaurant",
+  "tag_activities": "Dainty",
+  "tag_similar": "May also like",
+  "no_hotels": "We didn't find any nearby hotels in this area.",
+  "no_rest": "We did not find any restaurants near this area."
 }
