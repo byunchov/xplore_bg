@@ -45,7 +45,7 @@ void showSnackbar(BuildContext context, String message) {
   );
 }
 
-void showSnackbarold(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
+void showSnackbarKey(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
     String message) {
   scaffoldKey.currentState.showSnackBar(
     SnackBar(

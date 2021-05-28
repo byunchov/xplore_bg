@@ -27,7 +27,7 @@ class PopularPlacesBloc extends ChangeNotifier {
       p.placeTranslation = PlaceTranslation.fromFirebase(trData);
       places.add(p);
     }
-    _data.addAll(places);
+    _data = places;
     notifyListeners();
   }
 

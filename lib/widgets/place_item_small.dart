@@ -116,7 +116,7 @@ class PlaceItemSmall extends StatelessWidget {
         ),
       ),
       onTap: () {
-        nextScreenMaterial(context, PlaceDetailsPage(tag: _tag, place: place));
+        nextScreenHero(context, PlaceDetailsPage(tag: _tag, place: place));
       },
     );
   }

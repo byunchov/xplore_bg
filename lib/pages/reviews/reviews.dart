@@ -11,7 +11,6 @@ import 'package:xplore_bg/models/review.dart';
 import 'package:xplore_bg/pages/blank_page.dart';
 import 'package:xplore_bg/pages/reviews/add_review.dart';
 import 'package:xplore_bg/pages/sign_in.dart';
-import 'package:xplore_bg/utils/config.dart';
 import 'package:xplore_bg/utils/custom_cached_network_image.dart';
 import 'package:xplore_bg/utils/loading_cards.dart';
 import 'package:xplore_bg/utils/misc.dart';
@@ -67,92 +66,76 @@ class _ReviewsPageState extends State<ReviewsPage> {
         actions: [
           IconButton(
             icon: Icon(Feather.rotate_ccw),
-            onPressed: () {
-              onRefresh();
-              // setState(() {
-              //   _isLoading = true;
-              //   _hasData = true;
-              //   _lastVisible = null;
-              // });
-            },
+            onPressed: onRefresh,
           ),
         ],
       ),
       body: Builder(
         builder: (BuildContext context) {
-          return Column(
-            children: [
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: onRefresh,
-                  child: !_hasData
-                      ? ListView(
-                          children: [
-                            _reviewHeader(context),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.2),
-                            BlankPage(
-                              heading: "No Reviews",
-                              shortText: "Be the first to comment",
-                              icon: Icons.rate_review_rounded,
-                            ),
-                          ],
-                        )
-                      : ListView(
-                          controller: _scrollController,
-                          physics: AlwaysScrollableScrollPhysics(),
-                          children: [
-                            _lastVisible == null
-                                ? _reviewHeaderLoading()
-                                : _reviewHeader(context),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 20),
-                              child: Text(
-                                'reviews',
-                                style: Theme.of(context).textTheme.headline5,
-                              ).tr(),
-                            ),
-                            ListView.separated(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount:
-                                  _reviews.length != 0 ? _reviews.length : 5,
-                              itemBuilder: (_, int index) {
-                                if (index < _reviews.length) {
-                                  return ReviewCard(
-                                    review: _reviews[index],
-                                    actionMenu: _reviews[index].uid == _uid &&
-                                            _uid != null
-                                        ? _reviewActions(context)
-                                        : Container(),
-                                  );
-                                }
-                                return Opacity(
-                                  opacity: _isLoading ? 1.0 : 0.0,
-                                  child: _lastVisible == null
-                                      // ? LoadingCard(cardHeight: 160)
-                                      ? ReviewLoadingCard()
-                                      : Center(
-                                          child: SizedBox(
-                                            width: 32.0,
-                                            height: 32.0,
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                        ),
-                                );
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return Divider();
-                              },
-                            ),
-                          ],
-                        ),
-                ),
-              ),
-            ],
+          return RefreshIndicator(
+            onRefresh: onRefresh,
+            child: !_hasData
+                ? ListView(
+                    children: [
+                      _reviewHeader(context),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.2),
+                      BlankPage(
+                        heading: tr('no_reviews'),
+                        shortText: tr('no_reviews_desc'),
+                        icon: Icons.rate_review_rounded,
+                      ),
+                    ],
+                  )
+                : ListView(
+                    controller: _scrollController,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    children: [
+                      _lastVisible == null
+                          ? _reviewHeaderLoading()
+                          : _reviewHeader(context),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                        child: Text(
+                          'reviews',
+                          style: Theme.of(context).textTheme.headline5,
+                        ).tr(),
+                      ),
+                      ListView.separated(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _reviews.length != 0 ? _reviews.length : 5,
+                        itemBuilder: (_, int index) {
+                          if (index < _reviews.length) {
+                            return ReviewCard(
+                              review: _reviews[index],
+                              actionMenu:
+                                  _reviews[index].uid == _uid && _uid != null
+                                      ? _reviewActions(context)
+                                      : Container(),
+                            );
+                          }
+                          return Opacity(
+                            opacity: _isLoading ? 1.0 : 0.0,
+                            child: _lastVisible == null
+                                // ? LoadingCard(cardHeight: 160)
+                                ? ReviewLoadingCard()
+                                : Center(
+                                    child: SizedBox(
+                                      width: 32.0,
+                                      height: 32.0,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return Divider();
+                        },
+                      ),
+                    ],
+                  ),
           );
         },
       ),
@@ -175,13 +158,13 @@ class _ReviewsPageState extends State<ReviewsPage> {
       padding: EdgeInsets.only(top: 30, bottom: 15),
       color: Colors.grey[100],
       child: BlankPage(
-        heading: "Not logged in!",
-        shortText: "Login to give review.",
+        heading: tr('not_signed_in'),
+        shortText: tr('not_signed_in_desc'),
         customAction: Column(
           children: [
             SizedBox(height: 10),
             PrimaryButtonRg(
-              child: Text("Log in".toUpperCase()),
+              child: Text(tr('signin_btn').toUpperCase()),
               onPressed: () {
                 nextScreenMaterial(context, LoginScreen());
               },
@@ -223,14 +206,14 @@ class _ReviewsPageState extends State<ReviewsPage> {
           PopupMenuItem(
             child: ListTile(
               leading: Icon(Feather.edit),
-              title: Text("Edit"),
+              title: Text("edit").tr(),
             ),
             value: "edit",
           ),
           PopupMenuItem(
             child: ListTile(
               leading: Icon(Feather.delete),
-              title: Text("Delete"),
+              title: Text("delete").tr(),
             ),
             value: "delete",
           ),
@@ -258,6 +241,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
   }
 
   Widget _addReview(BuildContext context) {
+    final sb = context.read<SigninBloc>();
     return Container(
       padding: EdgeInsets.all(20),
       color: Colors.grey[100],
@@ -266,14 +250,14 @@ class _ReviewsPageState extends State<ReviewsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Rate and review",
+            "add_review_h",
             style: Theme.of(context).textTheme.headline5,
-          ),
+          ).tr(),
           SizedBox(height: 5),
           Text(
-            "Share your experience to help others. Be kind and don't swear in the review.",
+            "add_review_hint",
             style: Theme.of(context).textTheme.subtitle2,
-          ),
+          ).tr(),
           SizedBox(height: 20),
           Row(
             children: [
@@ -282,7 +266,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
                   height: 60,
                   width: 60,
                   child: CustomCachedImage(
-                    imageUrl: AppConfig().defaultProfilePic,
+                    imageUrl: sb.imageUrl,
                   ),
                 ),
               ),
@@ -301,20 +285,21 @@ class _ReviewsPageState extends State<ReviewsPage> {
                   Icons.star,
                   color: Colors.amber,
                 ),
-                onRatingUpdate: (rating) async {
-                  print("User gave $rating");
-                  final result = await nextScreenMaterial(
-                    context,
-                    AddReviewPage(
-                      rating: rating,
-                      place: this.widget.place,
-                    ),
-                  );
-                  if (result == "saved") {
-                    onRefresh();
-                  }
-                  showSnackbar(context, result);
-                  print(result);
+                onRatingUpdate: (rating) {
+                  Future.delayed(Duration(microseconds: 300)).then((_) async {
+                    final result = await nextScreenMaterial(
+                      context,
+                      AddReviewPage(
+                        rating: rating,
+                        place: this.widget.place,
+                      ),
+                    );
+                    if (result == "saved") {
+                      onRefresh();
+                      showSnackbar(context, result);
+                    }
+                    print(result);
+                  });
                 },
               ),
             ],
@@ -341,7 +326,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
       _reviews.clear();
       _lastVisible = null;
     });
-    Future.delayed(Duration(seconds: 2)).then((_) {
+    Future.delayed(Duration.zero).then((_) {
       _getCurrentUserReview();
       _getReviews();
     });
@@ -382,7 +367,6 @@ class _ReviewsPageState extends State<ReviewsPage> {
                 parseDate(review.timestamp, context.locale.toString());
             return review;
           }).toList();
-          print('blog reviews : ${_reviews.length}');
         });
       }
     } else {
@@ -431,11 +415,11 @@ class _ReviewsPageState extends State<ReviewsPage> {
             .read<ReviewBloc>()
             .deleteReview(widget.place.timestamp, _userReview.uid);
         Navigator.pop(context);
-        showSnackbar(context, "Deleted");
+        showSnackbar(context, tr('deleted_review'));
         onRefresh();
       },
-      title: "Delete?",
-      message: "U sure u want to delete?",
+      title: tr('delete'),
+      message: tr('delete_review'),
     );
   }
 }

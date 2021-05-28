@@ -6,34 +6,34 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:xplore_bg/models/hotel.dart';
 import 'package:xplore_bg/models/place.dart';
-import 'package:xplore_bg/models/restaurant.dart';
-import 'package:xplore_bg/pages/restaurant_details.dart';
+import 'package:xplore_bg/pages/restaurants/restaurant_details.dart';
 import 'package:xplore_bg/utils/config.dart';
 import 'package:xplore_bg/utils/custom_cached_network_image.dart';
 import 'package:xplore_bg/utils/maps_pin_converter.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
 
-class RestaurantsPage extends StatefulWidget {
+class HotelsPage extends StatefulWidget {
   final Place place;
   final String locale;
 
-  RestaurantsPage({Key key, @required this.place, this.locale})
+  HotelsPage({Key key, @required this.place, this.locale})
       : super(key: key);
 
   @override
-  _RestaurantsPageState createState() => _RestaurantsPageState();
+  _HotelsPageState createState() => _HotelsPageState();
 }
 
-class _RestaurantsPageState extends State<RestaurantsPage>
-    with AutomaticKeepAliveClientMixin<RestaurantsPage> {
+class _HotelsPageState extends State<HotelsPage>
+    with AutomaticKeepAliveClientMixin<HotelsPage> {
   GoogleMapController _controller;
-  List<Restaurant> _alldata = [];
+  List<Hotel> _alldata = [];
   SwiperController _swiperController;
   int prevPage;
   List _markers = [];
   Uint8List _customMarkerIcon;
-  final String _mapAPIKey = AppConfig().mapsAPIKey;
+  final String _mapAPIKey = AppConfig.mapsAPIKey;
 
   @override
   // TODO: implement wantKeepAlive
@@ -66,7 +66,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
               mapType: MapType.normal,
               initialCameraPosition: CameraPosition(
                 target: LatLng(widget.place.latitude, widget.place.longitude),
-                zoom: 15,
+                zoom: 13.5,
               ),
               markers: Set.from(_markers),
               onMapCreated: mapCreated,
@@ -83,7 +83,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
                     child: Swiper(
                       itemCount: _alldata.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return _restaurantListItem(context, index);
+                        return _hotelListItem(context, index);
                       },
                       loop: false,
                       viewportFraction: 0.8,
@@ -95,54 +95,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
                     ),
                   ),
                 ),
-          Positioned(
-              top: 15,
-              left: 10,
-              child: Row(
-                children: <Widget>[
-                  InkWell(
-                    child: Container(
-                      height: 45,
-                      width: 45,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.grey[300],
-                                blurRadius: 10,
-                                offset: Offset(3, 3))
-                          ]),
-                      child: Icon(Icons.keyboard_backspace),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.80,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.grey, width: 0.5)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15, top: 10, bottom: 10, right: 15),
-                      child: Text(
-                        "${widget.place.placeTranslation.name} - ${tr('nearby_rest')}",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                ],
-              )),
+          _topNavigation(context),
           _alldata.isEmpty
               ? Align(
                   alignment: Alignment.center,
@@ -154,7 +107,57 @@ class _RestaurantsPageState extends State<RestaurantsPage>
     ));
   }
 
-  Widget _restaurantListItem(BuildContext context, int index) {
+  Widget _topNavigation(BuildContext context) {
+    return Positioned(
+        top: 15,
+        left: 10,
+        child: Row(
+          children: <Widget>[
+            InkWell(
+              child: Container(
+                height: 45,
+                width: 45,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Colors.grey[300],
+                          blurRadius: 10,
+                          offset: Offset(3, 3))
+                    ]),
+                child: Icon(Icons.keyboard_backspace),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.80,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.grey, width: 0.5)),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 15, top: 10, bottom: 10, right: 15),
+                child: Text(
+                  "${widget.place.placeTranslation.name} - ${tr('nearby_hotels')}",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+          ],
+        ));
+  }
+
+  Widget _hotelListItem(BuildContext context, int index) {
     // double _screenWidth = MediaQuery.of(context).size.width;
     double _cardHeight = 220;
     double _cardRadius = 10;
@@ -301,7 +304,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
     String dataUrl =
         'https://maps.googleapis.com/maps/api/place/nearbysearch/json' +
             '?location=${widget.place.latitude},${widget.place.longitude}' +
-            '&radius=5000&type=restaurant&language=${widget.locale}&key=$_mapAPIKey';
+            '&radius=5000&type=hotel&keyword=hotel&language=${widget.locale}&key=$_mapAPIKey';
 
     http.Response response = await http.get(dataUrl);
 
@@ -320,7 +323,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
                 "&photoreference=${decodedData['results'][i]['photos'][0]['photo_reference']}&key=$_mapAPIKey";
           }
 
-          Restaurant restaurant = Restaurant(
+          Hotel hotel = Hotel(
             id: decodedData['results'][i]['place_id'],
             name: decodedData['results'][i]['name'],
             address: decodedData['results'][i]['vicinity'] ?? '',
@@ -335,7 +338,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
             thumbnail: thumb,
           );
 
-          _alldata.add(restaurant);
+          _alldata.add(hotel);
           _alldata.sort((a, b) => b.rating.compareTo(a.rating));
         }
       }
@@ -344,7 +347,7 @@ class _RestaurantsPageState extends State<RestaurantsPage>
 
   void setMarkerIcon() async {
     _customMarkerIcon =
-        await getBytesFromAsset(AppConfig().restaurantPinIcon, 100);
+        await getBytesFromAsset(AppConfig.hotelPinIcon, 100);
   }
 
   void _addMarker() {

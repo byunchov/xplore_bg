@@ -194,8 +194,8 @@ class SigninBloc extends ChangeNotifier {
     await sp.setString('uid', _uid);
     await sp.setString('join_date', _joinDate);
     await sp.setString('sign_in_provider', _signInProvider);
-    await sp.setInt('loved_count', _lovedCount);
-    await sp.setInt('bookmarks_count', _bookmarksCount);
+    await sp.setInt('loved_count', _lovedCount ?? 0);
+    await sp.setInt('bookmarks_count', _bookmarksCount ?? 0);
     // print("saveDataToSP() called.");
   }
 

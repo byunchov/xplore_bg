@@ -6,9 +6,9 @@ import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:xplore_bg/bloc/bookmark_bloc.dart';
 import 'package:xplore_bg/bloc/signin_bloc.dart';
 import 'package:xplore_bg/pages/blank_page.dart';
-import 'package:xplore_bg/pages/categories/category_list.dart';
 import 'package:xplore_bg/pages/sign_in.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
+import 'package:xplore_bg/widgets/categories/category_card_2.dart';
 import 'package:xplore_bg/widgets/ui_elements.dart';
 
 class BookmarksPage extends StatefulWidget {
@@ -66,8 +66,8 @@ class _BookmarksPageState extends State<BookmarksPage>
 
   Widget _notSignedIn() {
     return BlankPage(
-      heading: "Not Signed in",
-      shortText: "Signin to add bookmarks to your list.",
+      heading: tr('not_signed_in'),
+      shortText: tr('not_signed_in_desc'),
       icon: Feather.log_in,
       divider: false,
       customAction: Column(
@@ -75,7 +75,7 @@ class _BookmarksPageState extends State<BookmarksPage>
         children: [
           SizedBox(height: 15),
           PrimaryButtonRg(
-            child: Text("Log in".toUpperCase()),
+            child: Text(tr('signin_btn').toUpperCase()),
             onPressed: () {
               nextScreenMaterial(context, LoginScreen(tag: 'bookmarks'));
             },

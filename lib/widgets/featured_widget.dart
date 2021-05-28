@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
 import 'package:xplore_bg/bloc/feautured_bloc.dart';
-import 'package:xplore_bg/pages/explore.dart';
+import 'package:xplore_bg/utils/loading_cards.dart';
+import 'package:xplore_bg/widgets/home/editor_choice.dart';
 
 class FeaturedPlaces extends StatefulWidget {
   final int initialPosition;
@@ -23,7 +24,8 @@ class _FeaturedPlacesState extends State<FeaturedPlaces> {
       width: MediaQuery.of(context).size.width,
       height: 260,
       child: featuredBloc.data.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          // ? Center(child: CircularProgressIndicator())
+          ? FeaturedLoadingCard()
           : Swiper(
               itemCount: featuredBloc.data.length,
               itemBuilder: (BuildContext context, int index) {
