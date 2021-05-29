@@ -441,7 +441,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  "Ресторант · ${_restaurantDetails.priceLevel}",
+                  "${tr('tag_restaurant')} · ${_restaurantDetails.priceLevel}",
                   maxLines: 1,
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,

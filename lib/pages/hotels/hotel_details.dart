@@ -367,7 +367,7 @@ class _HotelDetailsPageState extends State<HotelDetailsPage> {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  "Хотел · ${_hotelDetails.priceLevel}",
+                  "${tr('tag_hotel')} · ${_hotelDetails.priceLevel}",
                   maxLines: 1,
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,

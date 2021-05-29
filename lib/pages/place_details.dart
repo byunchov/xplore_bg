@@ -51,7 +51,7 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
     // TODO: implement initState
     super.initState();
     _mapsRedirectUrl =
-        "https://www.google.com/maps/@${widget.place.latitude},${widget.place.longitude},13z";
+        "https://www.google.com/maps?saddr=My+Location&daddr=${widget.place.latitude},${widget.place.longitude}";
   }
 
   @override
@@ -140,12 +140,12 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
           ),
           SizedBox(height: 10),
           Text(
-            "Дейности",
+            "tag_actvities",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w800,
             ),
-          ),
+          ).tr(),
           CustomDivider(
             width: 80,
             height: 3,

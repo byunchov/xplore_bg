@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:xplore_bg/bloc/signin_bloc.dart';
 import 'package:xplore_bg/pages/home_page.dart';
 import 'package:xplore_bg/pages/sign_in.dart';
+import 'package:xplore_bg/utils/config.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
 
 class SplashPage extends StatefulWidget {
@@ -54,6 +55,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final _screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Center(
         child: ScaleTransition(
@@ -62,9 +65,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
             curve: Curves.decelerate,
           ),
           child: Image(
-            image: AssetImage("assets/images/maps/hotel.png"),
-            height: 120,
-            width: 120,
+            image: AssetImage(AppConfig.appLogo),
+            height: _screenWidth * 0.5,
+            width: _screenWidth * 0.5,
             fit: BoxFit.contain,
           ),
         ),
