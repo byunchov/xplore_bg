@@ -295,8 +295,8 @@ class _ReviewsPageState extends State<ReviewsPage> {
                       ),
                     );
                     if (result == "saved") {
+                      showSnackbar(context, tr('review_saved'));
                       onRefresh();
-                      showSnackbar(context, result);
                     }
                     print(result);
                   });

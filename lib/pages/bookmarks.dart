@@ -7,6 +7,7 @@ import 'package:xplore_bg/bloc/bookmark_bloc.dart';
 import 'package:xplore_bg/bloc/signin_bloc.dart';
 import 'package:xplore_bg/pages/blank_page.dart';
 import 'package:xplore_bg/pages/sign_in.dart';
+import 'package:xplore_bg/utils/loading_cards.dart';
 import 'package:xplore_bg/utils/page_navigation.dart';
 import 'package:xplore_bg/widgets/categories/category_card_2.dart';
 import 'package:xplore_bg/widgets/ui_elements.dart';
@@ -125,7 +126,12 @@ class _LovedlacesTabState extends State<LovedlacesTab>
               );
             }
           }
-          return Center(child: CircularProgressIndicator());
+          return ListView.separated(
+            padding: EdgeInsets.all(15),
+            itemCount: 7,
+            separatorBuilder: (context, index) => SizedBox(height: 15),
+            itemBuilder: (_, int index) => CategoryLoadingCard2(),
+          );
         },
       ),
     );
@@ -172,7 +178,12 @@ class _BookmarkedPlacesTabState extends State<BookmarkedPlacesTab>
               );
             }
           }
-          return Center(child: CircularProgressIndicator());
+          return ListView.separated(
+            padding: EdgeInsets.all(15),
+            itemCount: 7,
+            separatorBuilder: (context, index) => SizedBox(height: 15),
+            itemBuilder: (_, int index) => CategoryLoadingCard2(),
+          );
         },
       ),
     );

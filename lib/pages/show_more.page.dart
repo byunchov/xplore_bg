@@ -84,7 +84,7 @@ class _ShowMorePageState extends State<ShowMorePage> {
                       child: _lastVisible == null
                           ? Column(
                               children: [
-                                LoadingCard(cardHeight: 180),
+                                LoadingCard(cardHeight: 220),
                                 SizedBox(height: 15)
                               ],
                             )

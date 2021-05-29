@@ -140,7 +140,7 @@ class _PlaceDetailsPageState extends State<PlaceDetailsPage>
           ),
           SizedBox(height: 10),
           Text(
-            "tag_actvities",
+            "tag_activities",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w800,

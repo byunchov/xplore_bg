@@ -37,13 +37,14 @@ class RecentlyAddedPlaces extends StatelessWidget {
                       color: Colors.grey[800],
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Feather.arrow_right,
-                      color: Colors.grey[800],
-                    ),
-                    onPressed: this.onHeaderClick,
-                  ),
+                  SizedBox(height: 45),
+                  // IconButton(
+                  //   icon: Icon(
+                  //     Feather.arrow_right,
+                  //     color: Colors.grey[800],
+                  //   ),
+                  //   onPressed: this.onHeaderClick,
+                  // ),
                 ],
               ),
             )

@@ -22,7 +22,7 @@ class CategoryListItem2 extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        nextScreenMaterial(context, PlaceDetailsPage(tag: _tag, place: place));
+        nextScreenHero(context, PlaceDetailsPage(tag: _tag, place: place));
       },
       child: Stack(
         overflow: Overflow.visible,

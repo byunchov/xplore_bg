@@ -20,25 +20,44 @@ class _FeaturedPlacesState extends State<FeaturedPlaces> {
     Provider.of<FeaturedBloc>(context).locale = context.locale.toString();
     final featuredBloc = context.watch<FeaturedBloc>();
 
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 260,
-      child: featuredBloc.data.isEmpty
-          // ? Center(child: CircularProgressIndicator())
-          ? FeaturedLoadingCard()
-          : Swiper(
-              itemCount: featuredBloc.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                print("rebuild feat swiper");
-                return EditorsChoice(
-                  place: featuredBloc.data[index],
-                );
-              },
-              loop: false,
-              viewportFraction: 1.0,
-              scale: 0.8,
-              // pagination: SwiperPagination(),
-            ),
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.only(left: 15, right: 15, top: 25, bottom: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'feautured_places',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey[800],
+                ),
+              ).tr(),
+              // SizedBox(height: 50),
+            ],
+          ),
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: 260,
+          child: featuredBloc.data.isEmpty
+              ? FeaturedLoadingCard()
+              : Swiper(
+                  itemCount: featuredBloc.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return EditorsChoice(
+                      place: featuredBloc.data[index],
+                    );
+                  },
+                  loop: false,
+                  viewportFraction: 1.0,
+                  scale: 0.8,
+                ),
+        ),
+      ],
     );
   }
 }

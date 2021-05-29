@@ -148,8 +148,8 @@ class _AddReviewPageState extends State<AddReviewPage> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8)),
-                    labelText: 'review_input_lbl',
-                    hintText: 'review_input_hint',
+                    labelText: tr('review_input_lbl'),
+                    hintText: tr('review_input_hint'),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -208,7 +208,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
       // FocusScope.of(context).requestFocus(new FocusNode());
       // Navigator.of(context).pop();
       // showSnackbar(context, "Added review!");
-      Navigator.pop(context, tr('review_saved'));
+      Navigator.pop(context, "saved");
     }
   }
 }
