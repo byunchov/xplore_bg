@@ -2,6 +2,7 @@ class AppConfig {
   static final String appName = "Xplore Bulgaria";
   static final List<String> appLanguages = ["Български", "English"];
   static final List<String> appLocales = ["bg", "en"];
+  static final String appLogo = 'assets/images/logo.png';
 
   //google maps
   static final String mapsAPIKey = "AIzaSyDpkUJqyeoqveQoWlvQvXeNwRceopftryo";
