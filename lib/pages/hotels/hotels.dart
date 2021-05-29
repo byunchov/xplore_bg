@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:xplore_bg/models/hotel.dart';
 import 'package:xplore_bg/models/place.dart';
 import 'package:xplore_bg/pages/hotels/hotel_details.dart';
-import 'package:xplore_bg/pages/restaurants/restaurant_details.dart';
 import 'package:xplore_bg/utils/config.dart';
 import 'package:xplore_bg/utils/custom_cached_network_image.dart';
 import 'package:xplore_bg/utils/maps_pin_converter.dart';
